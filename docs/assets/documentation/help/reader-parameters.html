@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Overview</title>
+        <title>Reader Parameters</title>
 
 
         <!-- Custom HTML head -->
@@ -81,7 +81,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="overview.html">Overview</a></li><li class="chapter-item expanded "><a href="quick-facts-reportnet3.html">Quick Facts</a></li><li class="chapter-item expanded "><a href="feature-representation.html">Feature Representation</a></li><li class="chapter-item expanded "><a href="reader-parameters.html">Reader Parameters</a></li><li class="chapter-item expanded "><a href="reader-feature-type-param.html">Reader Feature Type Parameters</a></li><li class="chapter-item expanded "><a href="writer-feature-type-param.html">Writer Feature Type Parameters</a></li><li class="chapter-item expanded "><a href="user-attributes.html">User Attributes</a></li><li class="chapter-item expanded "><a href="reportnet3attachmentdownloader.html">Reportnet3AttachmentDownloader</a></li><li class="chapter-item expanded affix "><li class="part-title">Advanced</li><li class="chapter-item expanded "><a href="reportnet3connectionstring.html">Dynamic Connection String</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="overview.html">Overview</a></li><li class="chapter-item expanded "><a href="quick-facts-reportnet3.html">Quick Facts</a></li><li class="chapter-item expanded "><a href="feature-representation.html">Feature Representation</a></li><li class="chapter-item expanded "><a href="reader-parameters.html" class="active">Reader Parameters</a></li><li class="chapter-item expanded "><a href="reader-feature-type-param.html">Reader Feature Type Parameters</a></li><li class="chapter-item expanded "><a href="writer-feature-type-param.html">Writer Feature Type Parameters</a></li><li class="chapter-item expanded "><a href="user-attributes.html">User Attributes</a></li><li class="chapter-item expanded "><a href="reportnet3attachmentdownloader.html">Reportnet3AttachmentDownloader</a></li><li class="chapter-item expanded affix "><li class="part-title">Advanced</li><li class="chapter-item expanded "><a href="reportnet3connectionstring.html">Dynamic Connection String</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -142,20 +142,50 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="reportnet-3-eeareportnet"><a class="header" href="#reportnet-3-eeareportnet">Reportnet 3 (eea.reportnet)</a></h1>
-<p>This FME Package contains the Reportnet 3 Reader introduced for FME 2021.</p>
-<p>Reportnet 3 is the new e-Reporting platform (https://reportnet.europa.eu) for reporting environmental and climate data to the European Environment Agency (EEA). The platform embraces the strategic goals of the European Commission’s Green Deal and Digital Strategy and will host reporting tasks on behalf of EEA and the Commission.</p>
-<h2 id="usage"><a class="header" href="#usage">Usage</a></h2>
+                        <h1 id="reportnet-3-reader-parameters"><a class="header" href="#reportnet-3-reader-parameters">Reportnet 3 Reader Parameters</a></h1>
+<h3 id="reportnet-3-connection"><a class="header" href="#reportnet-3-connection">Reportnet 3 Connection</a></h3>
 <p>The Reportnet 3 Reader uses a Reportnet 3 Web Connection. The connection should be configured with an API-key from the e-Reporting platform.</p>
-<p>When this is configured the user may browse the Dataflows and Datasets the API-key grants access to.</p>
-<p>FME Feature Types are defined by selecting the corresponding Reportnet 3 Tables.</p>
+<h3 id="dataflow"><a class="header" href="#dataflow">Dataflow</a></h3>
+<p>The Reportnet 3 <em>Dataflow</em></p>
+<h3 id="dataset"><a class="header" href="#dataset">Dataset</a></h3>
+<p>The Reportnet 3 <em>Dataset</em></p>
+<h3 id="tables"><a class="header" href="#tables">Table(s)</a></h3>
+<p>The Reportnet 3 <em>Table(s)</em> to read from the selected <em>Dataflow/Dataset</em></p>
+<h2 id="advanced"><a class="header" href="#advanced">Advanced</a></h2>
+<h3 id="bulk-size"><a class="header" href="#bulk-size">Bulk size</a></h3>
+<p>The number of features (table records) to fetch in each roundtrip to the Reportnet3 HTTP API backend.</p>
+<p>Depending on how many fields a table has, the optimal value may differ.</p>
+<p>Setting a value lower than <code>1</code> is not supported.</p>
+<h3 id="concurrent-http-requests-experimental"><a class="header" href="#concurrent-http-requests-experimental">Concurrent HTTP requests (experimental)</a></h3>
+<p>Requires pagination (see above). If set, the reader will fetch pages in parallel up to the specified number of concurrent requests. In some scenarios this <em>may</em> speed up throughput.</p>
+<h3 id="connection-timeout-seconds"><a class="header" href="#connection-timeout-seconds">Connection Timeout (seconds)</a></h3>
+<p>Timeout value for the <em>full</em> download time.</p>
+<p>If retrieving data from the Reportnet3 HTTP API backend is not finished within <code>timeout</code> seconds, the connection is aborted and an exception is raised.</p>
+<h3 id="force-data-types"><a class="header" href="#force-data-types">Force data types</a></h3>
+<p>If set to <code>Yes</code>, FME will try to parse the text-values retrieved from the Reportnet3 HTTP API backend into the closest corresponding FME type, e.g. &quot;5&quot; NUMBER_INTEGER is parsed into an FME integer value of 5.</p>
+<p>If set to <code>No</code>, interpretation is <em>not</em> performed and all values are passed to FME as text regardless of the declared type.</p>
+<h3 id="parse-geometry"><a class="header" href="#parse-geometry">Parse geometry</a></h3>
+<p>If set to <code>Yes</code>, FME will try to convert a geometry column to an FME geometry. The geometry column will be dropped from schema. The name of the geometry column will be stored in the format paramater <code>reportnet_geom_column</code>.</p>
+<p>If set to <code>No</code>, FME will not attempt to create an FME geometry. All geometry columns from Reportnet 3 will maintain their json representation.</p>
+<h3 id="default-geom-column-for-all-feature-types"><a class="header" href="#default-geom-column-for-all-feature-types">Default geom column for all feature types</a></h3>
+<p>For Reportnet 3 tables that contain multiple geometry fields, this setting controls wich of them should be used by FME. The default behaviour is to use the first occuring geometry column in Reportnet 3 table definition.</p>
+<h2 id="schema-attributes"><a class="header" href="#schema-attributes">Schema Attributes</a></h2>
+<h3 id="additional-attributes-to-expose"><a class="header" href="#additional-attributes-to-expose">Additional Attributes to Expose</a></h3>
+<p>Use this parameter to expose Format Attributes in Workbench when you create a workspace:</p>
+<ul>
+<li>In a dynamic scenario, it means these attributes can be passed to the output dataset at runtime.</li>
+<li>In a non-dynamic scenario, this parameter allows you to expose additional attributes on multiple feature types. Click the browse button to view the available format attributes (which are different for each format) for the reader.</li>
+</ul>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="feature-representation.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
 
-                            <a rel="next" href="quick-facts-reportnet3.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="reader-feature-type-param.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -165,8 +195,11 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="feature-representation.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
 
-                    <a rel="next" href="quick-facts-reportnet3.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next" href="reader-feature-type-param.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Overview</title>
+        <title>Reader Feature Type Parameters</title>
 
 
         <!-- Custom HTML head -->
@@ -81,7 +81,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="overview.html">Overview</a></li><li class="chapter-item expanded "><a href="quick-facts-reportnet3.html">Quick Facts</a></li><li class="chapter-item expanded "><a href="feature-representation.html">Feature Representation</a></li><li class="chapter-item expanded "><a href="reader-parameters.html">Reader Parameters</a></li><li class="chapter-item expanded "><a href="reader-feature-type-param.html">Reader Feature Type Parameters</a></li><li class="chapter-item expanded "><a href="writer-feature-type-param.html">Writer Feature Type Parameters</a></li><li class="chapter-item expanded "><a href="user-attributes.html">User Attributes</a></li><li class="chapter-item expanded "><a href="reportnet3attachmentdownloader.html">Reportnet3AttachmentDownloader</a></li><li class="chapter-item expanded affix "><li class="part-title">Advanced</li><li class="chapter-item expanded "><a href="reportnet3connectionstring.html">Dynamic Connection String</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="overview.html">Overview</a></li><li class="chapter-item expanded "><a href="quick-facts-reportnet3.html">Quick Facts</a></li><li class="chapter-item expanded "><a href="feature-representation.html">Feature Representation</a></li><li class="chapter-item expanded "><a href="reader-parameters.html">Reader Parameters</a></li><li class="chapter-item expanded "><a href="reader-feature-type-param.html" class="active">Reader Feature Type Parameters</a></li><li class="chapter-item expanded "><a href="writer-feature-type-param.html">Writer Feature Type Parameters</a></li><li class="chapter-item expanded "><a href="user-attributes.html">User Attributes</a></li><li class="chapter-item expanded "><a href="reportnet3attachmentdownloader.html">Reportnet3AttachmentDownloader</a></li><li class="chapter-item expanded affix "><li class="part-title">Advanced</li><li class="chapter-item expanded "><a href="reportnet3connectionstring.html">Dynamic Connection String</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -142,20 +142,49 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="reportnet-3-eeareportnet"><a class="header" href="#reportnet-3-eeareportnet">Reportnet 3 (eea.reportnet)</a></h1>
-<p>This FME Package contains the Reportnet 3 Reader introduced for FME 2021.</p>
-<p>Reportnet 3 is the new e-Reporting platform (https://reportnet.europa.eu) for reporting environmental and climate data to the European Environment Agency (EEA). The platform embraces the strategic goals of the European Commission’s Green Deal and Digital Strategy and will host reporting tasks on behalf of EEA and the Commission.</p>
-<h2 id="usage"><a class="header" href="#usage">Usage</a></h2>
-<p>The Reportnet 3 Reader uses a Reportnet 3 Web Connection. The connection should be configured with an API-key from the e-Reporting platform.</p>
-<p>When this is configured the user may browse the Dataflows and Datasets the API-key grants access to.</p>
-<p>FME Feature Types are defined by selecting the corresponding Reportnet 3 Tables.</p>
+                        <h1 id="reportnet-3-reader-feature-type-parameters"><a class="header" href="#reportnet-3-reader-feature-type-parameters">Reportnet 3 Reader Feature Type Parameters</a></h1>
+<p>To access feature type parameters, click the gear icon on a feature type in the workspace. This opens the Feature Type Parameter Editor. </p>
+<h2 id="options"><a class="header" href="#options">Options</a></h2>
+<h3 id="where-clause"><a class="header" href="#where-clause">WHERE Clause</a></h3>
+<p>A <em>limited</em> filtering is supported by supplying a where-clause. </p>
+<p>The where clause must contain exactly one predicate in the form:</p>
+<pre><code>&lt;identifier&gt; = &lt;literal-value&gt;
+</code></pre>
+<p>Where <code>identifier</code> is a valid fieldname (FME attribute name), and <code>literal-value</code> a valid SQL literal.</p>
+<p>Please note that equality (=) <em>is the only</em> operator that can be used in the expression, i.e. <code>!=, &lt;, &gt;, AND, OR</code> are all examples of operators that can <em>not</em> be used.</p>
+<p>These restrictions also applies when using the Reportnet 3 Reader in a FeatureReader-transformer.</p>
+<p>Examples:</p>
+<pre><code class="language-sql">    id = 2
+</code></pre>
+<pre><code class="language-sql">    r = 10.2
+</code></pre>
+<p>Double quotes must be used if the field name contains special characters like whitespace:</p>
+<pre><code class="language-sql">    &quot;my field&quot; = 'Some text'
+</code></pre>
+<p>Single quotes in a string literal needs to be escaped by doubling them:</p>
+<pre><code class="language-sql">    &quot;my doc&quot; = 'I''d like to code more'
+</code></pre>
+<p>Newlines should be ok but can be tricky.</p>
+<pre><code class="language-sql">    &quot;my doc&quot; = 'A longer text 
+    Newlines should be ok'
+</code></pre>
+<p>In order to use specific newline character(s), url-encoding can be used:</p>
+<pre><code class="language-sql">    &quot;my doc&quot; = 'First line%0D%0ASecond line separated by CRLF'
+</code></pre>
+<pre><code class="language-sql">    &quot;my doc&quot; = 'First line%0ASecond line separated by LF'
+</code></pre>
+<pre><code class="language-sql">    &quot;my doc&quot; = 'First line%0DSecond line separated by CR'
+</code></pre>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="reader-parameters.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
 
-                            <a rel="next" href="quick-facts-reportnet3.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="writer-feature-type-param.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -165,8 +194,11 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="reader-parameters.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
 
-                    <a rel="next" href="quick-facts-reportnet3.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next" href="writer-feature-type-param.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

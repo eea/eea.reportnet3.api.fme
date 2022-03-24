@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Overview</title>
+        <title>Reportnet3AttachmentDownloader</title>
 
 
         <!-- Custom HTML head -->
@@ -81,7 +81,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="overview.html">Overview</a></li><li class="chapter-item expanded "><a href="quick-facts-reportnet3.html">Quick Facts</a></li><li class="chapter-item expanded "><a href="feature-representation.html">Feature Representation</a></li><li class="chapter-item expanded "><a href="reader-parameters.html">Reader Parameters</a></li><li class="chapter-item expanded "><a href="reader-feature-type-param.html">Reader Feature Type Parameters</a></li><li class="chapter-item expanded "><a href="writer-feature-type-param.html">Writer Feature Type Parameters</a></li><li class="chapter-item expanded "><a href="user-attributes.html">User Attributes</a></li><li class="chapter-item expanded "><a href="reportnet3attachmentdownloader.html">Reportnet3AttachmentDownloader</a></li><li class="chapter-item expanded affix "><li class="part-title">Advanced</li><li class="chapter-item expanded "><a href="reportnet3connectionstring.html">Dynamic Connection String</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="overview.html">Overview</a></li><li class="chapter-item expanded "><a href="quick-facts-reportnet3.html">Quick Facts</a></li><li class="chapter-item expanded "><a href="feature-representation.html">Feature Representation</a></li><li class="chapter-item expanded "><a href="reader-parameters.html">Reader Parameters</a></li><li class="chapter-item expanded "><a href="reader-feature-type-param.html">Reader Feature Type Parameters</a></li><li class="chapter-item expanded "><a href="writer-feature-type-param.html">Writer Feature Type Parameters</a></li><li class="chapter-item expanded "><a href="user-attributes.html">User Attributes</a></li><li class="chapter-item expanded "><a href="reportnet3attachmentdownloader.html" class="active">Reportnet3AttachmentDownloader</a></li><li class="chapter-item expanded affix "><li class="part-title">Advanced</li><li class="chapter-item expanded "><a href="reportnet3connectionstring.html">Dynamic Connection String</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -142,20 +142,56 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="reportnet-3-eeareportnet"><a class="header" href="#reportnet-3-eeareportnet">Reportnet 3 (eea.reportnet)</a></h1>
-<p>This FME Package contains the Reportnet 3 Reader introduced for FME 2021.</p>
-<p>Reportnet 3 is the new e-Reporting platform (https://reportnet.europa.eu) for reporting environmental and climate data to the European Environment Agency (EEA). The platform embraces the strategic goals of the European Commission’s Green Deal and Digital Strategy and will host reporting tasks on behalf of EEA and the Commission.</p>
-<h2 id="usage"><a class="header" href="#usage">Usage</a></h2>
-<p>The Reportnet 3 Reader uses a Reportnet 3 Web Connection. The connection should be configured with an API-key from the e-Reporting platform.</p>
-<p>When this is configured the user may browse the Dataflows and Datasets the API-key grants access to.</p>
-<p>FME Feature Types are defined by selecting the corresponding Reportnet 3 Tables.</p>
+                        <h1 id="reportnet3attachmentdownloader"><a class="header" href="#reportnet3attachmentdownloader">Reportnet3AttachmentDownloader</a></h1>
+<p>The Reportnet3AttachmentDownloader can be used to download attachments form Reportnet 3.</p>
+<p>For other usage then downloading attachments for features that are coming from a Reportnet 3 Reader, see section <a href="#attachment-src_attr_single">Attachment</a> below for how to compose an attachment-attribute that can be used in this transformer.</p>
+<h2 id="parameters"><a class="header" href="#parameters">Parameters</a></h2>
+<h3 id="reportnet-3-connection-reportnet_connection"><a class="header" href="#reportnet-3-connection-reportnet_connection">Reportnet 3 Connection <code>[REPORTNET_CONNECTION]</code></a></h3>
+<h3 id="attachment-selection-src_attr"><a class="header" href="#attachment-selection-src_attr">Attachment selection <code>[SRC_ATTR]</code></a></h3>
+<ul>
+<li>Single Attachment: A single attachment is downloaded for each feature determined by the selected attribute</li>
+<li>Multiple: Several attributes can be selected for download. In this mode the attachments must be always be written to a folder.</li>
+</ul>
+<h3 id="attachment-src_attr_single"><a class="header" href="#attachment-src_attr_single">Attachment [SRC_ATTR_SINGLE]</a></h3>
+<p>The attribute that identifies what to download. The value of the attribute must be encoded like this</p>
+<pre><code>&lt;filename&gt;:&lt;dataflow_id&gt;:&lt;dataset_id&gt;:&lt;field_value_id&gt;
+</code></pre>
+<p>Example:</p>
+<pre><code>myfile.txt:123:456:567
+</code></pre>
+<h3 id="attachments-src_attr_multiple"><a class="header" href="#attachments-src_attr_multiple">Attachments [SRC_ATTR_MULTIPLE]</a></h3>
+<p>Choose multiple attachment attributes to be processed.</p>
+<h3 id="save-attachments-to-save_file"><a class="header" href="#save-attachments-to-save_file">Save Attachment(s) to [SAVE_FILE]</a></h3>
+<ul>
+<li>
+<p>Attribute: The content of the attachment is stored to an attribute.</p>
+</li>
+<li>
+<p>File: Each attachment is downloaded to a separate file. The local filepath will be composed like this:</p>
+<pre><code>  &lt;output folder&gt;/&lt;dataflow_id&gt;/&lt;dataset_id&gt;/&lt;field_value_id&gt;/&lt;filename&gt;
+</code></pre>
+<p>The features will have the value of the attachment attribute(s) replaced with the resulting local filepath.</p>
+</li>
+</ul>
+<h3 id="target-attribute-target_attr"><a class="header" href="#target-attribute-target_attr">Target Attribute [TARGET_ATTR]</a></h3>
+<p>The name of a new attribute that will recieve the content of the downloaded attachment.</p>
+<h3 id="target-attribute-encoding-target_attr_encoding"><a class="header" href="#target-attribute-encoding-target_attr_encoding">Target Attribute Encoding [TARGET_ATTR_ENCODING]</a></h3>
+<p>For attachments with text content, this should be used to specify how FME should interpret the downloaded byte-stream into a string value. For other kinds of attachments, e.g. .pdf-files, use fme-binary.</p>
+<h3 id="output-folder-output_dirname"><a class="header" href="#output-folder-output_dirname">Output Folder [OUTPUT_DIRNAME]</a></h3>
+<p>Specify a folder where the attachments should be stored.</p>
+<h3 id="timeout-timeout"><a class="header" href="#timeout-timeout">Timeout [TIMEOUT]</a></h3>
+<p>Timeout value for the full download time (for each attachment).</p>
+<p>If retrieving data from the Reportnet3 HTTP API backend is not finished within timeout seconds, the connection is aborted and an exception is raised.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="user-attributes.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
 
-                            <a rel="next" href="quick-facts-reportnet3.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="reportnet3connectionstring.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -165,8 +201,11 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="user-attributes.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
 
-                    <a rel="next" href="quick-facts-reportnet3.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next" href="reportnet3connectionstring.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
