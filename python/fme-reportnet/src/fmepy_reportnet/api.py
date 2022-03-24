@@ -225,7 +225,7 @@ class Reportnet3Client_v0_1(object):
         if filter:
             if not dict == type(filter):
                 raise Exception('filter should be a dictionary with exactly two keys: columnName and filterValue')
-        url = f'{self.base_url}/dataset/{dataset_id}/etlExport'
+        url = f'{self.base_url}/dataset/v2/etlExport/{dataset_id}'
         page_size = self.paging or 15000
         if limit is not None:
             page_size = min(limit, page_size)
@@ -236,8 +236,7 @@ class Reportnet3Client_v0_1(object):
         }
         if filter is not None:
             params.update(filter)
-        if '/v1' == self.url_version_tag and data_provider_codes is not None:
-            url = f'{self.base_url}/dataset/v2/etlExport/{dataset_id}'
+        if data_provider_codes is not None:
             params['dataProviderCodes'] = data_provider_codes
         def get_page(page_nbr):
             if not hasattr(self.thread_local, 'session'):
@@ -251,9 +250,10 @@ class Reportnet3Client_v0_1(object):
                 # Normally this should not happen but if the endpoint reports wrong nbr of total records we may end up here.
                 #print(f'thread {threading.get_ident()}, page_nbr {page_nbr} - aborting due to empty page at {self.thread_local.empty_page_at}')
                 return 0, page_nbr, []
+
             r = self.thread_local.session.get(
                 url,
-                params={**params, "offset": page_nbr},
+                params={**params, **({ "limit": 0 } if not page_nbr else {}), "offset": page_nbr},
                 timeout=timeout or self.timeout
             )
             r.raise_for_status()
@@ -272,7 +272,7 @@ class Reportnet3Client_v0_1(object):
                 self.logger.warn('totalRecords %s', total_records)
                 return 0, page_nbr, []
             records = data.get('records', [])
-            if not len(records):
+            if not len(records) and page_nbr > 0:
                 # print(f'thread {threading.get_ident()}, page_nbr {page_nbr} - no records ({records})')
                 # no records, this could happen if the initial calculation of total nbr pages was wrong
                 self.thread_local.empty_page_at = page_nbr
@@ -280,13 +280,13 @@ class Reportnet3Client_v0_1(object):
                 return 0, page_nbr, []
             self.logger.debug('page_nbr %s, %s records', page_nbr, len(records))
             return total_records,page_nbr,records
-        total_records,_,page_one = get_page(1)
+        total_records,_,page_one = get_page(0)
         records_to_fetch = total_records
         if limit is not None:
             records_to_fetch = min(limit, total_records)
         last_page_nbr = math.ceil(records_to_fetch / page_size)
-        additional_page_nbrs = range(2, last_page_nbr + 1, 1)
-        self.logger.debug('total_records: %s, fetching %s records in %s pages', total_records, records_to_fetch, 1 + len(additional_page_nbrs))
+        additional_page_nbrs = range(1, last_page_nbr + 1, 1)
+        self.logger.debug('total_records: %s, fetching %s records in %s pages', total_records, records_to_fetch, len(additional_page_nbrs))
         with concurrent.futures.ThreadPoolExecutor(max_workers=concurrent_http_requests) as executor:
             additional_pages = []
             if ordered:
