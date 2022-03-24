@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<ImportExportData>
+
+  <version>2</version>
+
+  <webservices>
+    <webservicexml>&lt;?xml version="1.0" encoding="UTF-8" standalone="no" ?&gt;
+&lt;webservice&gt;
+
+  &lt;authentication&gt;
+    &lt;type&gt;TOKEN&lt;/type&gt;
+    &lt;service_name&gt;eea.reportnet.Reportnet 3 v1&lt;/service_name&gt;
+    &lt;version&gt;1&lt;/version&gt;
+    &lt;help_url&gt;&amp;lt;a href=https://reportnet.europa.eu/&amp;gt;Reportnet 3 home page&amp;lt;/a&amp;gt;&lt;/help_url&gt;
+    &lt;description&gt;&amp;lt;p&amp;gt;For use with EEA's Reportnet 3 format (eea.reportnet.reportnet3).&amp;lt;/p&amp;gt;&lt;/description&gt;
+    &lt;markdown_description&gt;For use with EEA's Reportnet 3 format (eea.reportnet.reportnet3).&lt;/markdown_description&gt;
+    &lt;connection_description&gt;&lt;/connection_description&gt;
+    &lt;markdown_connection_description&gt;&lt;/markdown_connection_description&gt;
+    &lt;access_token_request_format&gt;&lt;/access_token_request_format&gt;
+    &lt;token_format&gt;&lt;/token_format&gt;
+    &lt;access_token_url&gt;&lt;/access_token_url&gt;
+    &lt;authorization_header_format&gt;Authorization: ApiKey [API_KEY]&lt;/authorization_header_format&gt;
+    &lt;token_item_name&gt;&lt;/token_item_name&gt;
+    &lt;expiry_object_key&gt;&lt;/expiry_object_key&gt;
+    &lt;expiry_time_format&gt;
+      &lt;expiry_type&gt;0&lt;/expiry_type&gt;
+      &lt;expiry_format&gt;&lt;/expiry_format&gt;
+    &lt;/expiry_time_format&gt;
+    &lt;use_bearer_token&gt;yes&lt;/use_bearer_token&gt;
+    &lt;use_query_string&gt;&lt;/use_query_string&gt;
+    &lt;nc_gui_fields&gt;
+      &lt;nc_gui_field&gt;
+        &lt;field_name&gt;API_URL&lt;/field_name&gt;
+        &lt;gui_line&gt;GUI URL API_URL http%https API URL&lt;/gui_line&gt;
+        &lt;gui_line&gt;DEFAULT_VALUE API_URL https://api.reportnet.europa.eu&lt;/gui_line&gt;
+      &lt;/nc_gui_field&gt;
+      &lt;nc_gui_field&gt;
+        &lt;field_name&gt;API_KEY&lt;/field_name&gt;
+        &lt;gui_line&gt;GUI PASSWORD API_KEY API Key&lt;/gui_line&gt;
+      &lt;/nc_gui_field&gt;
+      &lt;nc_gui_field&gt;
+        &lt;field_name&gt;PROVIDER_ID&lt;/field_name&gt;
+        &lt;gui_line&gt;GUI OPTIONAL TEXT PROVIDER_ID Provider ID&lt;/gui_line&gt;
+      &lt;/nc_gui_field&gt;
+    &lt;/nc_gui_fields&gt;
+    &lt;nc_header_fields&gt;
+      &lt;nc_header_key&gt;Accept&lt;/nc_header_key&gt;
+      &lt;nc_header_val&gt;application/json&lt;/nc_header_val&gt;
+      &lt;nc_header_key&gt;Content-Language&lt;/nc_header_key&gt;
+      &lt;nc_header_val&gt;en-US&lt;/nc_header_val&gt;
+      &lt;nc_header_key&gt;Content-Type&lt;/nc_header_key&gt;
+      &lt;nc_header_val&gt;application/x-www-form-urlencoded&lt;/nc_header_val&gt;
+    &lt;/nc_header_fields&gt;
+  &lt;/authentication&gt;
+
+&lt;/webservice&gt;
+</webservicexml>
+  </webservices>
+
+  <derivedwebservices/>
+
+  <named_connections/>
+
+</ImportExportData>

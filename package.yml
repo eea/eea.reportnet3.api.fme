@@ -1,0 +1,21 @@
+fpkg_version: 1
+uid: reportnet
+publisher_uid: eea
+name: Reportnet 3
+description: Access to European Environment Agency environmental and climate reporting data.
+version: 0.2.4
+minimum_fme_build: 21222
+author:
+  name: EEA
+  email: discomap@eea.europa.eu
+package_content:
+  transformers:
+    - name: Reportnet3AttachmentDownloader
+      version: 2
+  formats:
+      - name: reportnet3
+  python_packages:
+    - name: fme-reportnet
+    - name: sqlparse
+  web_services:
+      - name: Reportnet 3.xml
