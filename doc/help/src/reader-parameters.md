@@ -21,7 +21,7 @@ Depending on how many fields a table has, the optimal value may differ.
 
 Setting a value lower than `1` is not supported.
 
-### Concurrent HTTP requests (experimental)
+### Concurrent HTTP requests
 Requires pagination (see above). If set, the reader will fetch pages in parallel up to the specified number of concurrent requests. In some scenarios this _may_ speed up throughput.
 
 ### Connection Timeout (seconds)
@@ -41,6 +41,9 @@ If set to `No`, FME will not attempt to create an FME geometry. All geometry col
 
 ### Default geom column for all feature types
 For Reportnet 3 tables that contain multiple geometry fields, this setting controls wich of them should be used by FME. The default behaviour is to use the first occuring geometry column in Reportnet 3 table definition.
+
+### Data Providers
+For Reportnet3 Datasets that is composed from many data providers, this setting can be used to filter the read operation based on data provider code(s).
 
 ## Schema Attributes
 ### Additional Attributes to Expose

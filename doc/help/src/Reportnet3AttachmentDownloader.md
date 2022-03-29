@@ -10,7 +10,7 @@ For other usage then downloading attachments for features that are coming from a
 ### Attachment selection `[SRC_ATTR]`
 
 * Single Attachment: A single attachment is downloaded for each feature determined by the selected attribute
-* Multiple: Several attributes can be selected for download. In this mode the attachments must be always be written to a folder.
+* Multiple: Several attributes can be selected for download. In this mode the attachments must always be written to a folder.
 
 ### Attachment [SRC_ATTR_SINGLE]
 The attribute that identifies what to download. The value of the attribute must be encoded like this
