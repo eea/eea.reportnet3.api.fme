@@ -3,3 +3,6 @@ build
 dist 
 help/pkg-reportnet3 
 python/sqlparse 
+env_*.bat
+make*.bat
+mklinks.bat
