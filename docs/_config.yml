@@ -6,6 +6,8 @@ theme: minima
 
 base_url: /rn3test
 
+# Archive from <Today> didnt render
+future: true
 # Minima social links
 # twitter_username: xyz
 # github_username: xyz
