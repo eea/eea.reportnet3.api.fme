@@ -12,7 +12,10 @@ def create_client(version,*args,**kwargs):
         return Reportnet3Client_v0_1(*args,**kwargs)
     elif '1' == version:
         return Reportnet3Client_v0_1(*args,**kwargs,url_version_tag='/v1')
-    raise Exception(f'Invalid version: `{version}`')
+    elif '2' == version:
+        return Reportnet3Client_v0_1(*args,**kwargs,url_version_tag='/v1')
+    raise Exception(f'Invalid reportnet api client version: `{version}`')
+
 
 class Reportnet3Client_v0_1(object):
     def __init__(self, api_key, base_url='https://rn3api.eionet.europa.eu', provider_id=None, timeout=10, paging=None,log_name=None,url_version_tag=''):
@@ -238,6 +241,8 @@ class Reportnet3Client_v0_1(object):
             params.update(filter)
         if data_provider_codes is not None:
             params['dataProviderCodes'] = data_provider_codes
+        if self.provider_id is not None and len(self.provider_id):
+            params['providerId'] = self.provider_id
         def get_page(page_nbr):
             if not hasattr(self.thread_local, 'session'):
                 # creating a private session for this thread
@@ -387,5 +392,3 @@ if __name__ == '__main__':
     api_key,*rem = sys.argv[1:]
     client = create_client(client_version, api_key)
     client._selftest(*rem)
-
-
