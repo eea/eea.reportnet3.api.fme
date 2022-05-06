@@ -9,7 +9,7 @@ import os
 import os.path
 import TransformerUtil
 from . import rn3_fme
-XFORMER_API_VERSION_MAP = {1:'0', 2:'1'}
+XFORMER_API_VERSION_MAP = {1:'0', 2:'1', 3:'2'}
 XFORMER_PARAMS_VERSION_MAP = {
     1: namedtuple('ParamsV1', [
               'reportnet_connection'
@@ -24,6 +24,18 @@ XFORMER_PARAMS_VERSION_MAP = {
         ]
     ),
     2: namedtuple('ParamsV2', [
+              'reportnet_connection'
+            , 'src_attr'
+            , 'src_attr_single'
+            , 'src_attr_multiple'
+            , 'save_file'
+            , 'target_attr'
+            , 'target_attr_encoding'
+            , 'output_dirname'
+            , 'timeout'
+        ]
+    ),
+    3: namedtuple('ParamsV3', [
               'reportnet_connection'
             , 'src_attr'
             , 'src_attr_single'
