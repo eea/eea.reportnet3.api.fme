@@ -121,7 +121,8 @@ class Reportnet3Writer(FMEWriter):
             , 'vertex_nbr', 'NUMBER_INTEGER'
         ]
         """
-        # Between feature type and attribute types, there is a set of writer configuration params that we need to retrieve (see example_input above).
+        # Between feature type and attribute types, there is a set of writer configuration 
+        # params that we need to retrieve (see example_input above).
         # The order is not consequent so a dict helps assigning right value to right key
         # Feature type is always first
         pStart = 2
@@ -177,30 +178,43 @@ class Reportnet3Writer(FMEWriter):
             self._feature_types = self._mapping_file_wrapper.getFeatureTypes(parameters)
         parsed_parameters = OpenParameters(datasetName, parameters)
         self._logger.debug('%s: %s', self._logprefix, f'open\n\tsearch_envelope: {self._search_envelope}\n\tfeature_types: {self._feature_types}\n\tparsed parameters: {parsed_parameters}')
+        merged_parameters = {
+            f: v
+            for f in
+            WriterParams._fields
+            for v in [
+                parsed_parameters.get(f.upper(), self._mapping_file_wrapper.get(f'_REPORTNET_{f.upper()}'))
+            ]
+            if v is not None and len(v)
+        }
+        self._logger.debug('%s: merged parameters %s', self._logprefix, merged_parameters)
+        credentials = rn3_fme.resolve_named_connection(merged_parameters.get('connection'))
+        dataflow_id_in_credentials = getattr(credentials, 'DATAFLOW_ID', None)
+        if dataflow_id_in_credentials is not None:
+            merged_parameters['dataflow'] = dataflow_id_in_credentials
         self._params = WriterParams(*(
-            parse_writer_param(f, parsed_parameters.get(f.upper(), self._mapping_file_wrapper.get(f'_REPORTNET_{f.upper()}')))
+            parse_writer_param(f, merged_parameters.get(f))
             for f in
             WriterParams._fields
         ))
         self._logger.debug('%s: %s', self._logprefix, self._params)
         # TODO: In what situations would we *not* require a valid connection here?
-        if self._params.connection:
-            credentials = rn3_fme.resolve_named_connection(self._params.connection)
+        # if self._params.connection:
 
-            # fetch value using getattr (falling back to '0') because it was added in version 1
-            credentials_version = getattr(credentials, 'VERSION', '0')
+        # fetch value using getattr (falling back to '0') because it was added in version 1
+        credentials_version = getattr(credentials, 'VERSION', '0')
 
-            if self._params.api_version != credentials_version:
-                raise FMEException('This Workspace/MappingFile was created using version {} of the Repornet3 api but the supplied connection is of version {}.'.format(self._params.api_version, credentials_version))
-            self._client = reportnet_api.create_client(
-                  self._params.api_version
-                , credentials.API_KEY
-                , base_url=credentials.API_URL
-                , provider_id=credentials.PROVIDER_ID
-                , timeout=60 # TODO: add to fmf - self._params.connection_timeout
-                , log_name=f'{self.__class__.__module__}.{self.__class__.__qualname__}'
-            )
-            self._logger.debug('%s: Client created - %s', self._logprefix, self._client)
+        if self._params.api_version != credentials_version:
+            raise FMEException('This Workspace/MappingFile was created using version {} of the Repornet3 api but the supplied connection is of version {}.'.format(self._params.api_version, credentials_version))
+        self._client = reportnet_api.create_client(
+                self._params.api_version
+            , credentials.API_KEY
+            , base_url=credentials.API_URL
+            , provider_id=credentials.PROVIDER_ID
+            , timeout=60 # TODO: add to fmf - self._params.connection_timeout
+            , log_name=f'{self.__class__.__module__}.{self.__class__.__qualname__}'
+        )
+        self._logger.debug('%s: Client created - %s', self._logprefix, self._client)
         #self._logger.debug('%s:      defLines = `%s`', self._logprefix, [*self._mapping_file_wrapper.defLines()])
     def rollbackTransaction(self):
         pass

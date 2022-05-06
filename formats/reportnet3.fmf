@@ -91,7 +91,7 @@ DESTINATION_PREAMBLE
 END_DESTINATION_PREAMBLE
 
 DESTINATION_SETTINGS
-DEFAULT_VALUE REPORTNET_API_VERSION 1
+DEFAULT_VALUE REPORTNET_API_VERSION 2
 DEFAULT_VALUE REPORTNET_WRITER_VERSION 0
 
 GUI NAMEDGROUP CONNECTION_GROUP REPORTNET_CONNECTION Service Connection
@@ -99,11 +99,10 @@ GUI NAMEDGROUP CONNECTION_GROUP REPORTNET_CONNECTION Service Connection
 -DEFAULT_VALUE REPORTNET_CONNECTION "$(REPORTNET_CONNECTION)"
 -GUI NAMED_CONNECTION_ENCODED REPORTNET_CONNECTION \"eea.reportnet.Reportnet 3 v2\" Reportnet 3 Connection:
 
-GUI NAMEDGROUP CONSTRAINTS_GROUP REPORTNET_DATAFLOW%REPORTNET_DATASET%TABLELIST Constraints
-DEFAULT_VALUE REPORTNET_DATAFLOW $(REPORTNET_DATAFLOW)
-GUI DYNAMIC_SINGLE_SELECT REPORTNET_DATAFLOW $[DATASET],MODE,DATAFLOWS,REPORTNET_CONNECTION,$[REPORTNET_CONNECTION],CONNECTION_TIMEOUT,$[CONNECTION_TIMEOUT],REPORTNET_API_VERSION,$[REPORTNET_API_VERSION] Dataflow:
+GUI NAMEDGROUP CONSTRAINTS_GROUP REPORTNET_DATASET Constraints
+
 DEFAULT_VALUE REPORTNET_DATASET $(REPORTNET_DATASET)
-GUI DYNAMIC_SINGLE_SELECT REPORTNET_DATASET $[DATASET],MODE,DATASETS,REPORTNET_CONNECTION,$[REPORTNET_CONNECTION],REPORTNET_DATAFLOW,$[REPORTNET_DATAFLOW],CONNECTION_TIMEOUT,$[CONNECTION_TIMEOUT],REPORTNET_API_VERSION,$[REPORTNET_API_VERSION] Dataset:
+GUI DYNAMIC_SINGLE_SELECT REPORTNET_DATASET $[DATASET],MODE,DATASETS,REPORTNET_CONNECTION,$[REPORTNET_CONNECTION],CONNECTION_TIMEOUT,$[CONNECTION_TIMEOUT],REPORTNET_API_VERSION,$[REPORTNET_API_VERSION] Dataset:
 
 DEFAULT_VALUE WRITER_BULK_SIZE 10000
 DEFAULT_VALUE VALIDATE_GEOM_TYPE PT
@@ -131,23 +130,23 @@ GEOMETRY_TYPE_FIELD reportnet_type
 GENERICIZE_GEOMTYPE_ATTR_NAME reportnet_type
 
 ! TODO: Replace reportnet_none if format sets FMEGeometry onto FMEFeatures.
-GEOM_MAP reportnet_none         fme_no_geom
-GEOM_MAP fme_no_map         fme_text
-GEOM_MAP reportnet_point        fme_point
-GEOM_MAP reportnet_linestring   fme_line
-GEOM_MAP reportnet_polygon      fme_polygon
-GEOM_MAP fme_no_map          fme_text
-GEOM_MAP fme_no_map          fme_ellipse
-GEOM_MAP fme_no_map          fme_arc
-GEOM_MAP fme_no_map          fme_rectangle
-GEOM_MAP fme_no_map          fme_rounded_rectangle
-GEOM_MAP reportnet_multipoint          fme_point
-GEOM_MAP reportnet_multilinestring          fme_line
-GEOM_MAP reportnet_multipolygon          fme_polygon
-GEOM_MAP fme_no_map          fme_raster
-GEOM_MAP fme_no_map          fme_solid
-GEOM_MAP fme_no_map          fme_surface
-GEOM_MAP fme_no_map          fme_point_cloud
+GEOM_MAP reportnet_none              fme_no_geom
+GEOM_MAP fme_no_map                  fme_text
+GEOM_MAP reportnet_point             fme_point
+GEOM_MAP reportnet_linestring        fme_line
+GEOM_MAP reportnet_polygon           fme_polygon
+GEOM_MAP fme_no_map                  fme_text
+GEOM_MAP fme_no_map                  fme_ellipse
+GEOM_MAP fme_no_map                  fme_arc
+GEOM_MAP fme_no_map                  fme_rectangle
+GEOM_MAP fme_no_map                  fme_rounded_rectangle
+GEOM_MAP reportnet_multipoint        fme_point
+GEOM_MAP reportnet_multilinestring   fme_line
+GEOM_MAP reportnet_multipolygon      fme_polygon
+GEOM_MAP fme_no_map                  fme_raster
+GEOM_MAP fme_no_map                  fme_solid
+GEOM_MAP fme_no_map                  fme_surface
+GEOM_MAP fme_no_map                  fme_point_cloud
 
 ! -----------------------------------------------------------------------------
 ! Define the mappings of the attribute types.
@@ -224,9 +223,9 @@ INCLUDE [if {"$(FMEGEN_DIRECTION)" == "Source"}                               \
 WORKBENCH_EXPOSABLE_ATTRIBUTES                                                \
    $(SourceExposableAttrs)                                                    \
    $(DestExposableAttrs)                                                      \
-   reportnet_type                         TEXT                              \
-   reportnet_geom_column                         TEXT                       \
-   reportnet_writer_bulk_size                         INTEGER
+   reportnet_type                         TEXT                                \
+   reportnet_geom_column                  TEXT                                \
+   reportnet_writer_bulk_size             INTEGER
 
 ! -----------------------------------------------------------------------------
 ! DEF line and feature type parameters.
@@ -270,13 +269,13 @@ INCLUDE [if {"$(FMEGEN_DIRECTION)" == "Source"} {                             \
 ! -----------------------------------------------------------------------------
 ! The list of words that are not allowed to be attributes
 ! TODO: All format attributes should be included here.
-DEST_ILLEGAL_ATTR_LIST                                                        \
-    reportnet_type text                                                       \
-    reportnet_geom_column text                                                       \
-    reportnet_country_code text                                                       \
-    reportnet_writer_bulk_size integer                                                       \
-    reportnet_where_clause text                                                       \
-    reportnet_validate_geom_type text                                                       \
+DEST_ILLEGAL_ATTR_LIST                                   \
+    reportnet_type text                                  \
+    reportnet_geom_column text                           \
+    reportnet_country_code text                          \
+    reportnet_writer_bulk_size integer                   \
+    reportnet_where_clause text                          \
+    reportnet_validate_geom_type text                    \
     $(CONFIGURATION_ILLEGAL_ATTR_LIST)
 
 ! ------------------------------------------------------------------------------
