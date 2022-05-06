@@ -9,7 +9,7 @@
 
   &lt;authentication&gt;
     &lt;type&gt;TOKEN&lt;/type&gt;
-    &lt;service_name&gt;eea.reportnet.Reportnet 3 v1&lt;/service_name&gt;
+    &lt;service_name&gt;eea.reportnet.Reportnet 3 v2&lt;/service_name&gt;
     &lt;version&gt;1&lt;/version&gt;
     &lt;help_url&gt;&amp;lt;a href=https://reportnet.europa.eu/&amp;gt;Reportnet 3 home page&amp;lt;/a&amp;gt;&lt;/help_url&gt;
     &lt;description&gt;&amp;lt;p&amp;gt;For use with EEA's Reportnet 3 format (eea.reportnet.reportnet3).&amp;lt;/p&amp;gt;&lt;/description&gt;
@@ -37,6 +37,10 @@
       &lt;nc_gui_field&gt;
         &lt;field_name&gt;API_KEY&lt;/field_name&gt;
         &lt;gui_line&gt;GUI PASSWORD API_KEY API Key&lt;/gui_line&gt;
+      &lt;/nc_gui_field&gt;
+      &lt;nc_gui_field&gt;
+        &lt;field_name&gt;DATAFLOW_ID&lt;/field_name&gt;
+        &lt;gui_line&gt;GUI TEXT DATAFLOW_ID Dataflow ID&lt;/gui_line&gt;
       &lt;/nc_gui_field&gt;
       &lt;nc_gui_field&gt;
         &lt;field_name&gt;PROVIDER_ID&lt;/field_name&gt;
