@@ -598,7 +598,13 @@ class Reportnet3Reader(FMEReader):
 
         if self._params.reportnet_api_version != credentials_version:
             raise FMEException('This Workspace/MappingFile was created using version {} of the Repornet3 api but the supplied connection is of version {}.'.format(self._params.reportnet_api_version, credentials_version))
-
+        
+        dataflow_id_in_credentials = getattr(credentials, 'DATAFLOW_ID', None)
+        if dataflow_id_in_credentials is not None:
+            reportnet_dataflow = ReportnetIdentifier('_', dataflow_id_in_credentials)
+            # Params is a tuple and can not be changed but we can create a new one from dict where we override reportnet_dataflow
+            self._params = Params(**{**self._params._asdict(), 'reportnet_dataflow': reportnet_dataflow})
+        
         self._reportnet_client = reportnet_api.create_client(
               self._params.reportnet_api_version
             , credentials.API_KEY
