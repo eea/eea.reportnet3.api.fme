@@ -11,7 +11,7 @@ setup(
     name="fme-reportnet",
     packages=find_packages("src"),
     package_dir={"": "src"},
-    version="0.2.6",
+    version="0.2.7",
     description="Code for the eea.reportnet package in FME",
     long_description=readme,
     long_description_content_type="text/markdown",
