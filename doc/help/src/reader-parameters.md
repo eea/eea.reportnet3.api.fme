@@ -1,10 +1,9 @@
 # Reportnet 3 Reader Parameters
 
 ### Reportnet 3 Connection
-The Reportnet 3 Reader uses a Reportnet 3 Web Connection. The connection should be configured with an API-key from the e-Reporting platform.
+The Reportnet 3 Reader uses a Reportnet 3 Web Connection. 
 
-### Dataflow
-The Reportnet 3 *Dataflow*
+The connection should be configured with an API-key, a Dataflow ID and optionally Provider ID from the e-Reporting platform.
 
 ### Dataset
 The Reportnet 3 *Dataset*
@@ -21,8 +20,10 @@ Depending on how many fields a table has, the optimal value may differ.
 
 Setting a value lower than `1` is not supported.
 
-### Concurrent HTTP requests (experimental)
-Requires pagination (see above). If set, the reader will fetch pages in parallel up to the specified number of concurrent requests. In some scenarios this _may_ speed up throughput.
+### Concurrent HTTP requests
+The reader will fetch pages in parallel up to the specified number of concurrent requests. 
+
+In some scenarios it _can_ be possible to increase the throughput by carefully configure the bulk size in combination with number of concurrent requests.
 
 ### Connection Timeout (seconds)
 Timeout value for the *full* download time.
