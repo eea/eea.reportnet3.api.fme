@@ -334,6 +334,8 @@ class Reportnet3Reader(FMEReader):
                     name, value, field_value_id = field["fieldName"], field["value"], field["field_value_id"]
                     try:
                         if geom_field_name and geom_field_name == name:
+                            if value is None or not value:
+                                continue
                             # TODO: introduce invalid geometry handling concept - reader parameter warn/reject/...
                             geom_json = json.loads(value)
                             if not isinstance(geom_json, dict):
@@ -370,6 +372,7 @@ class Reportnet3Reader(FMEReader):
                             value = VALUE_PARSERS[reportnet_attr_type](value)
                         feature.setAttribute(schema.attribute_types[name].fme_name, value)
                     except Exception as e:
+                        self._error(f'An error occurred while parsing field {name}:')
                         self._error(e)
                         feature.setAttribute(f'{name}.error', str(e))
                         feature.setAttributeNullWithType(name, fmeobjects.FME_ATTR_STRING)
