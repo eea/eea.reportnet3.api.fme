@@ -6,3 +6,4 @@ python/sqlparse
 env_*.bat
 make*.bat
 mklinks.bat
+devenv/**
