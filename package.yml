@@ -3,7 +3,7 @@ uid: reportnet
 publisher_uid: eea
 name: Reportnet 3
 description: Access to European Environment Agency environmental and climate reporting data.
-version: 0.2.7
+version: 1.0.0
 minimum_fme_build: 21222
 author:
   name: EEA
