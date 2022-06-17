@@ -1,5 +1,10 @@
 # Reportnet 3 changes
 
+## v1.0.0
+Data provider code(s) can now be controlled by attribute
+
+Errors when parsing geometry should now be more detailed
+
 ## v0.2.7
 
 The setting for Dataflow ID has now moved into the connection parameters.
