@@ -8,6 +8,10 @@ The connection should be configured with an API-key, a Dataflow ID and optionall
 ### Dataset
 The Reportnet 3 *Dataset*
 
+When selecting the Reportnet Dataset using the browse-button, the value will be encoded for readability, e.g. "My Dataset (42)", where 42 corresponds to the dataset id.
+
+When supplying the value for dataset dynamically, such as when used in a FeatureReader, it is valid to only specify the numeric id.
+
 ### Table(s)
 The Reportnet 3 *Table(s)* to read from the selected *Dataflow/Dataset*
 
