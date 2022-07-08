@@ -6,12 +6,10 @@
 {{#include ../../../package.yml}}
 ```
 
-## github
+## Commit
 
 [eea.reportnet3.api.fme@{{#include ../../../.commit_hash}}](https://github.com/eea/eea.reportnet3.api.fme/tree/{{#include ../../../.commit_hash}})
 
-
-## Changelog
 
 {{#include ../../../CHANGES.md}}
 
