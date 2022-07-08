@@ -11,4 +11,5 @@
 
 # Advanced
 - [Dynamic Connection String](./reportnet3connectionstring.md)
+- [Version Info](./version.md)
 
