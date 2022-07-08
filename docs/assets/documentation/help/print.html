@@ -14,7 +14,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
 
-        <link rel="icon" href="favicon.svg">
         <link rel="shortcut icon" href="favicon.png">
         <link rel="stylesheet" href="css/variables.css">
         <link rel="stylesheet" href="css/general.css">
@@ -82,7 +81,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="overview.html">Overview</a></li><li class="chapter-item expanded "><a href="quick-facts-reportnet3.html">Quick Facts</a></li><li class="chapter-item expanded "><a href="feature-representation.html">Feature Representation</a></li><li class="chapter-item expanded "><a href="reader-parameters.html">Reader Parameters</a></li><li class="chapter-item expanded "><a href="reader-feature-type-param.html">Reader Feature Type Parameters</a></li><li class="chapter-item expanded "><a href="writer-feature-type-param.html">Writer Feature Type Parameters</a></li><li class="chapter-item expanded "><a href="user-attributes.html">User Attributes</a></li><li class="chapter-item expanded "><a href="reportnet3attachmentdownloader.html">Reportnet3AttachmentDownloader</a></li><li class="chapter-item expanded affix "><li class="part-title">Advanced</li><li class="chapter-item expanded "><a href="reportnet3connectionstring.html">Dynamic Connection String</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="overview.html">Overview</a></li><li class="chapter-item expanded "><a href="quick-facts-reportnet3.html">Quick Facts</a></li><li class="chapter-item expanded "><a href="feature-representation.html">Feature Representation</a></li><li class="chapter-item expanded "><a href="reader-parameters.html">Reader Parameters</a></li><li class="chapter-item expanded "><a href="reader-feature-type-param.html">Reader Feature Type Parameters</a></li><li class="chapter-item expanded "><a href="writer-feature-type-param.html">Writer Feature Type Parameters</a></li><li class="chapter-item expanded "><a href="user-attributes.html">User Attributes</a></li><li class="chapter-item expanded "><a href="reportnet3attachmentdownloader.html">Reportnet3AttachmentDownloader</a></li><li class="chapter-item expanded affix "><li class="part-title">Advanced</li><li class="chapter-item expanded "><a href="reportnet3connectionstring.html">Dynamic Connection String</a></li><li class="chapter-item expanded "><a href="version.html">Version Info</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -145,10 +144,10 @@
                     <main>
                         <h1 id="reportnet-3-eeareportnet"><a class="header" href="#reportnet-3-eeareportnet">Reportnet 3 (eea.reportnet)</a></h1>
 <p>This FME Package contains the Reportnet 3 Reader introduced for FME 2021.</p>
-<p>Reportnet 3 is the new <a href="https://reportnet.europa.eu">e-Reporting platform</a> for reporting environmental and climate data to the European Environment Agency (EEA). The platform embraces the strategic goals of the European Commission’s Green Deal and Digital Strategy and will host reporting tasks on behalf of EEA and the Commission.</p>
+<p>Reportnet 3 is the new <a href="https://reportnet.europa.eu">e-Reporting platform</a> for reporting environmental and climate data to the European Environment Agency (EEA). The platform embraces the strategic goals of the European Commission's Green Deal and Digital Strategy and will host reporting tasks on behalf of EEA and the Commission.</p>
 <h2 id="usage"><a class="header" href="#usage">Usage</a></h2>
-<p>The Reportnet 3 Reader uses a Reportnet 3 Web Connection. The connection should be configured with an API-key from the e-Reporting platform.</p>
-<p>When this is configured the user may browse the Dataflows and Datasets the API-key grants access to.</p>
+<p>The Reportnet 3 Reader uses a Reportnet 3 Web Connection. The connection should be configured with a Dataflow ID and API-key from the e-Reporting platform.</p>
+<p>When this is configured the user may browse the Datasets the API-key grants access to.</p>
 <p>FME Feature Types are defined by selecting the corresponding Reportnet 3 Tables.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="quick-facts"><a class="header" href="#quick-facts">Quick Facts</a></h1>
 <table><thead><tr><th>Keyword</th><th>Value</th></tr></thead><tbody>
@@ -360,6 +359,47 @@ https://test-api.reportnet.europa.eu?VERSION=2&amp;API_KEY=502982a2-95a5-43ae-bf
 </code></pre>
 <p>Please note that in version 2, <code>DATAFLOW_ID</code> was added as a mandatory url-query-parameter.</p>
 <p>This logic is applied both on the reader, writer and the Reportnet3AttachmentDownloader.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="version-info"><a class="header" href="#version-info">Version Info</a></h1>
+<h2 id="packageyaml"><a class="header" href="#packageyaml">package.yaml</a></h2>
+<pre><code class="language-yaml">fpkg_version: 1
+uid: reportnet
+publisher_uid: eea
+name: Reportnet 3
+description: Access to European Environment Agency environmental and climate reporting data.
+version: 1.0.0
+minimum_fme_build: 21222
+author:
+  name: EEA
+  email: discomap@eea.europa.eu
+package_content:
+  transformers:
+    - name: Reportnet3AttachmentDownloader
+      version: 2
+  formats:
+      - name: reportnet3
+  python_packages:
+    - name: fme-reportnet
+    - name: sqlparse
+  web_services:
+      - name: Reportnet 3.xml
+</code></pre>
+<h2 id="commit"><a class="header" href="#commit">Commit</a></h2>
+<p><a href="https://github.com/eea/eea.reportnet3.api.fme/tree/6b24efca1678fdb4612382388e578901a14c1032">eea.reportnet3.api.fme@6b24efca1678fdb4612382388e578901a14c1032</a></p>
+<h1 id="reportnet-3-changes"><a class="header" href="#reportnet-3-changes">Reportnet 3 changes</a></h1>
+<h2 id="v100"><a class="header" href="#v100">v1.0.0</a></h2>
+<p>Data provider code(s) can now be controlled by attribute</p>
+<p>Errors when parsing geometry should now be more detailed</p>
+<h2 id="v027"><a class="header" href="#v027">v0.2.7</a></h2>
+<p>The setting for Dataflow ID has now moved into the connection parameters.</p>
+<p>Because of this, the named connection has got a &quot;version bump&quot;, i.e. named connections created with earlier versions of the reportnet3 package will not work with this version of the reader/writer/transformer.</p>
+<p>Workspaces created with earlier versions of the reportnet3 package should continue to work.</p>
+<h2 id="v026"><a class="header" href="#v026">v0.2.6</a></h2>
+<p>Let Readers inherit name from the selected webconnection</p>
+<h2 id="v025"><a class="header" href="#v025">v0.2.5</a></h2>
+<p>Always use etlExport v2 (for now)</p>
+<p>Minor fix in concurrent requests</p>
+<h2 id="v024-initial-test-release"><a class="header" href="#v024-initial-test-release">v0.2.4 Initial test release</a></h2>
+<p>First testrelease</p>
 
                     </main>
 
