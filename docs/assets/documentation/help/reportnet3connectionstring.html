@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Dynamic Connection String</title>
+        <title>Dynamic Connection String - eea.reportnet [1.0.0]</title>
 
 
         <!-- Custom HTML head -->
@@ -110,7 +110,7 @@
                         </button>
                     </div>
 
-                    <h1 class="menu-title"></h1>
+                    <h1 class="menu-title">eea.reportnet [1.0.0]</h1>
 
                     <div class="right-buttons">
                         <a href="print.html" title="Print this book" aria-label="Print this book">
@@ -147,10 +147,16 @@
 <p>The value supplied for the Reportnet3 connection will be evaluated like this:</p>
 <ol>
 <li>If the value matches exactly an FME Named Connection, that will be used.</li>
-<li>If the value is a URL in the form <code>&lt;api_url&gt;?API_KEY=&lt;token&gt;[&amp;PROVIDER_ID=&lt;provider_id&gt;][&amp;VERSION=&lt;version&gt;]</code>, that will be used.</li>
+<li>Else, if the value is a URL in one of the following forms, that will be used:</li>
 </ol>
-<p>Example of the second form:</p>
-<p><code>https://rn3api.eionet.europa.eu?VERSION=1&amp;API_KEY=502982a2-95a5-43ae-bf3b-d16356042c86&amp;PROVIDER_ID=5</code></p>
+<p><code>&lt;api_url&gt;?API_KEY=&lt;token&gt;[&amp;VERSION=1][&amp;PROVIDER_ID=&lt;provider_id&gt;]</code></p>
+<p><code>&lt;api_url&gt;?API_KEY=&lt;token&gt;&amp;VERSION=2&amp;DATAFLOW_ID=&lt;dataflow_id&gt;[&amp;PROVIDER_ID=&lt;provider_id&gt;]</code></p>
+<p>Examples:</p>
+<pre><code>https://test-api.reportnet.europa.eu?API_KEY=502982a2-95a5-43ae-bf3b-d16356042c86
+https://test-api.reportnet.europa.eu?VERSION=1&amp;API_KEY=502982a2-95a5-43ae-bf3b-d16356042c86&amp;PROVIDER_ID=5
+https://test-api.reportnet.europa.eu?VERSION=2&amp;API_KEY=502982a2-95a5-43ae-bf3b-d16356042c86&amp;DATAFLOW_ID=861&amp;PROVIDER_ID=10
+</code></pre>
+<p>Please note that in version 2, <code>DATAFLOW_ID</code> was added as a mandatory url-query-parameter.</p>
 <p>This logic is applied both on the reader, writer and the Reportnet3AttachmentDownloader.</p>
 
                     </main>
