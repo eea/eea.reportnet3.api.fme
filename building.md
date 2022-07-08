@@ -11,7 +11,8 @@ git clone https://github.com/eea/eea.reportnet3.api.fme.git
 cd eea.reportnet3.api.fme\python
 git clone https://github.com/andialbrecht/sqlparse
 cd ..
-copy /y doc\help\src\Reportnet3AttachmentDownloader.md transformers 
+copy /y doc\help\src\Reportnet3AttachmentDownloader.md transformers
+for /f "usebackq delims==" %i IN (`python -c "from ruamel.yaml import YAML;print(YAML().load(open('package.yml')).get('version'))"`) DO SET MDBOOK_BOOK__TITLE=eea.reportnet [%i]
 mdbook build doc\help -d ..\..\help\pkg-reportnet3
 fpkgr pack . 
 ```
