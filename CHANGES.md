@@ -1,5 +1,8 @@
 # Reportnet 3 changes
 
+## v1.0.1
+README updated
+
 ## v1.0.0
 Data provider code(s) can now be controlled by attribute
 

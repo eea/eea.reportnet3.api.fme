@@ -9,3 +9,7 @@ The Reportnet 3 Reader uses a Reportnet 3 Web Connection. The connection should 
 When this is configured the user may browse the Datasets the API-key grants access to.
 
 FME Feature Types are defined by selecting the corresponding Reportnet 3 Tables.
+
+### See also
+For instructions and more information: [Package Homepage](https://eea.github.io/eea.reportnet3.api.fme/).
+
