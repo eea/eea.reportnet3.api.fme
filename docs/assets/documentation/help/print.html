@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>eea.reportnet [1.0.0]</title>
+        <title>eea.reportnet [1.0.1]</title>
         <meta name="robots" content="noindex" />
 
 
@@ -110,7 +110,7 @@
                         </button>
                     </div>
 
-                    <h1 class="menu-title">eea.reportnet [1.0.0]</h1>
+                    <h1 class="menu-title">eea.reportnet [1.0.1]</h1>
 
                     <div class="right-buttons">
                         <a href="print.html" title="Print this book" aria-label="Print this book">
@@ -149,8 +149,10 @@
 <p>The Reportnet 3 Reader uses a Reportnet 3 Web Connection. The connection should be configured with a Dataflow ID and API-key from the e-Reporting platform.</p>
 <p>When this is configured the user may browse the Datasets the API-key grants access to.</p>
 <p>FME Feature Types are defined by selecting the corresponding Reportnet 3 Tables.</p>
+<h3 id="see-also"><a class="header" href="#see-also">See also</a></h3>
+<p>For instructions and more information: <a href="https://eea.github.io/eea.reportnet3.api.fme/">Package Homepage</a>.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="quick-facts"><a class="header" href="#quick-facts">Quick Facts</a></h1>
-<table><thead><tr><th>Keyword</th><th>Value</th></tr></thead><tbody>
+<div class="table-wrapper"><table><thead><tr><th>Keyword</th><th>Value</th></tr></thead><tbody>
 <tr><td>Format Type Identifier</td><td>EEA.REPORTNET.REPORTNET3</td></tr>
 <tr><td>Requirements</td><td>FME Build 21222+</td></tr>
 <tr><td>Reader/Writer</td><td>Reader</td></tr>
@@ -169,8 +171,9 @@
 <tr><td>Geometry Type</td><td>reportnet_type</td></tr>
 <tr><td>Encoding Support</td><td>UTF-8</td></tr>
 </tbody></table>
+</div>
 <p>Geometry Support:</p>
-<table><thead><tr><th>Geometry</th><th>Supported?</th></tr></thead><tbody>
+<div class="table-wrapper"><table><thead><tr><th>Geometry</th><th>Supported?</th></tr></thead><tbody>
 <tr><td>aggregate</td><td>yes<sup class="footnote-reference"><a href="#1">1</a></sup></td></tr>
 <tr><td>circles</td><td>no</td></tr>
 <tr><td>circular arc</td><td>no</td></tr>
@@ -187,16 +190,17 @@
 <tr><td>text</td><td>no</td></tr>
 <tr><td>z values</td><td>yes</td></tr>
 </tbody></table>
+</div>
 <div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
 <p>Only homogeneous aggregates (MultiPoint, MultiLine...) but not heterogeneous ones.</p>
 </div>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="reportnet-3-feature-representation-format-attributes"><a class="header" href="#reportnet-3-feature-representation-format-attributes">Reportnet 3 Feature Representation (Format Attributes)</a></h1>
-<table><thead><tr><th>Attribute Name</th><th>Notes</th><th>Contents</th></tr></thead><tbody>
+<div class="table-wrapper"><table><thead><tr><th>Attribute Name</th><th>Notes</th><th>Contents</th></tr></thead><tbody>
 <tr><td>reportnet_type</td><td>Read-only</td><td><code>reportnet_none</code>, <code>reportnet_point</code>, <code>reportnet_linestring</code>, <code>reportnet_polygon</code></td></tr>
 <tr><td>reportnet_geom_column</td><td>Read-only</td><td>The Reportnet3 field that was used to create FME geometry.</td></tr>
 <tr><td>reportnet_country_code</td><td>Read-only</td><td>The reporting country (when applicable).</td></tr>
 </tbody></table>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="reportnet-3-reader-parameters"><a class="header" href="#reportnet-3-reader-parameters">Reportnet 3 Reader Parameters</a></h1>
+</div><div style="break-before: page; page-break-before: always;"></div><h1 id="reportnet-3-reader-parameters"><a class="header" href="#reportnet-3-reader-parameters">Reportnet 3 Reader Parameters</a></h1>
 <h3 id="reportnet-3-connection"><a class="header" href="#reportnet-3-connection">Reportnet 3 Connection</a></h3>
 <p>The Reportnet 3 Reader uses a Reportnet 3 Web Connection. </p>
 <p>The connection should be configured with an API-key, a Dataflow ID and optionally Provider ID from the e-Reporting platform.</p>
@@ -281,7 +285,7 @@
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="reportnet-3-user-attributes"><a class="header" href="#reportnet-3-user-attributes">Reportnet 3 User Attributes</a></h1>
 <p><strong>Name</strong>: The name of the attribute (field name).</p>
-<table><thead><tr><th>Type</th><th>Description</th></tr></thead><tbody>
+<div class="table-wrapper"><table><thead><tr><th>Type</th><th>Description</th></tr></thead><tbody>
 <tr><td>TEXT</td><td></td></tr>
 <tr><td>DATETIME</td><td></td></tr>
 <tr><td>DATE</td><td></td></tr>
@@ -303,7 +307,7 @@
 <tr><td>LINK</td><td></td></tr>
 <tr><td>ATTACHMENT</td><td>When reading, attachments will be encoded by FME in a way to facilitate usage in the <a href="./reportnet3attachmentdownloader.html#attachment-src_attr_single">Reportnet3AttachmentDownloader</a> transformer.</td></tr>
 </tbody></table>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="reportnet3attachmentdownloader"><a class="header" href="#reportnet3attachmentdownloader">Reportnet3AttachmentDownloader</a></h1>
+</div><div style="break-before: page; page-break-before: always;"></div><h1 id="reportnet3attachmentdownloader"><a class="header" href="#reportnet3attachmentdownloader">Reportnet3AttachmentDownloader</a></h1>
 <p>The Reportnet3AttachmentDownloader can be used to download attachments form Reportnet 3.</p>
 <p>For other usage then downloading attachments for features that are coming from a Reportnet 3 Reader, see section <a href="reportnet3attachmentdownloader.html#attachment-src_attr_single">Attachment</a> below for how to compose an attachment-attribute that can be used in this transformer.</p>
 <h2 id="parameters"><a class="header" href="#parameters">Parameters</a></h2>
@@ -366,7 +370,7 @@ uid: reportnet
 publisher_uid: eea
 name: Reportnet 3
 description: Access to European Environment Agency environmental and climate reporting data.
-version: 1.0.0
+version: 1.0.1
 minimum_fme_build: 21222
 author:
   name: EEA
@@ -384,8 +388,10 @@ package_content:
       - name: Reportnet 3.xml
 </code></pre>
 <h2 id="commit"><a class="header" href="#commit">Commit</a></h2>
-<p><a href="https://github.com/eea/eea.reportnet3.api.fme/tree/6b24efca1678fdb4612382388e578901a14c1032">eea.reportnet3.api.fme@6b24efca1678fdb4612382388e578901a14c1032</a></p>
+<p><a href="https://github.com/eea/eea.reportnet3.api.fme/tree/085487f472bbea5e6a7d94dd30f083ffa910bdb2">eea.reportnet3.api.fme@085487f472bbea5e6a7d94dd30f083ffa910bdb2</a></p>
 <h1 id="reportnet-3-changes"><a class="header" href="#reportnet-3-changes">Reportnet 3 changes</a></h1>
+<h2 id="v101"><a class="header" href="#v101">v1.0.1</a></h2>
+<p>README updated</p>
 <h2 id="v100"><a class="header" href="#v100">v1.0.0</a></h2>
 <p>Data provider code(s) can now be controlled by attribute</p>
 <p>Errors when parsing geometry should now be more detailed</p>
