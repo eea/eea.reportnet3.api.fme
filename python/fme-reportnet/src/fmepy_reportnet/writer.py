@@ -19,6 +19,7 @@ WriterParams = collections.namedtuple(
         , 'dataflow'
         , 'dataset'
         , 'api_version'
+        , 'connection_timeout'
         , 'reportnet_geom_column'
         , 'reportnet_writer_bulk_size'
     ]
@@ -57,6 +58,8 @@ def checkInt(str):
     except ValueError:
         return False
 def parse_writer_param(k,s):
+    if 'connection_timeout' == k and checkInt(s):
+        return int(s)
     if k in ('dataflow', 'dataset'):
         # attempt to allow integer as input. possible side effects?
         if checkInt(s):
@@ -211,7 +214,7 @@ class Reportnet3Writer(FMEWriter):
             , credentials.API_KEY
             , base_url=credentials.API_URL
             , provider_id=credentials.PROVIDER_ID
-            , timeout=60 # TODO: add to fmf - self._params.connection_timeout
+            , timeout=self._params.connection_timeout # TODO: add to fmf - self._params.connection_timeout
             , log_name=f'{self.__class__.__module__}.{self.__class__.__qualname__}'
         )
         self._logger.debug('%s: Client created - %s', self._logprefix, self._client)

@@ -7,3 +7,4 @@ env_*.bat
 make*.bat
 mklinks.bat
 devenv/**.commit_hash 
+reportnet3_logging.json
