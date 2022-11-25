@@ -2,8 +2,6 @@
 To access feature type parameters, click the gear icon on a feature type in the workspace. This opens the Feature Type Parameter Editor.
 
 ## Options
-### Bulk Size
-The parameter adjusts how many FME features will be bundled togather for each HTTP transactions to the Reportnet 3 API. The parameter is required with a value larger than 0.
 ### Spatial Column
 Determines target attribute in Reportnet 3 to store the FME geometry. If Spatial Column is not defined, the writer will attempt to use the format attribute `reportnet_geom_column` as fallback. If the FME feature has a geometry and neither Spatial Column nor `reportnet_geom_column` was present, the writer will ignore geometry writing and output a warning message.
 ### Geometry type handling

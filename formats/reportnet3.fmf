@@ -92,7 +92,8 @@ END_DESTINATION_PREAMBLE
 
 DESTINATION_SETTINGS
 DEFAULT_VALUE REPORTNET_API_VERSION 2
-DEFAULT_VALUE REPORTNET_WRITER_VERSION 0
+DEFAULT_VALUE REPORTNET_WRITER_VERSION 1
+DEFAULT_VALUE VALIDATE_GEOM_TYPE PT
 
 GUI NAMEDGROUP CONNECTION_GROUP REPORTNET_CONNECTION Service Connection
 
@@ -104,11 +105,14 @@ GUI NAMEDGROUP CONSTRAINTS_GROUP REPORTNET_DATASET Constraints
 DEFAULT_VALUE REPORTNET_DATASET $(REPORTNET_DATASET)
 GUI DYNAMIC_SINGLE_SELECT REPORTNET_DATASET $[DATASET],MODE,DATASETS,REPORTNET_CONNECTION,$[REPORTNET_CONNECTION],CONNECTION_TIMEOUT,$[CONNECTION_TIMEOUT],REPORTNET_API_VERSION,$[REPORTNET_API_VERSION] Dataset:
 
+GUI DISCLOSUREGROUP ADVANCED WRITER_BULK_SIZE%CONNECTION_TIMEOUT Advanced
+
 DEFAULT_VALUE WRITER_BULK_SIZE 10000
-DEFAULT_VALUE VALIDATE_GEOM_TYPE PT
+GUI INTEGER WRITER_BULK_SIZE Bulk Size:
 
 DEFAULT_VALUE CONNECTION_TIMEOUT 120
-GUI INTEGER CONNECTION_TIMEOUT Connection Timeout (seconds):
+GUI RANGE_SLIDER CONNECTION_TIMEOUT 1%3600%0%OFF Connection Timeout (seconds):
+
 
 END_DESTINATION_SETTINGS
 
@@ -226,8 +230,7 @@ WORKBENCH_EXPOSABLE_ATTRIBUTES                                                \
    $(SourceExposableAttrs)                                                    \
    $(DestExposableAttrs)                                                      \
    reportnet_type                         TEXT                                \
-   reportnet_geom_column                  TEXT                                \
-   reportnet_writer_bulk_size             INTEGER
+   reportnet_geom_column                  TEXT
 
 ! -----------------------------------------------------------------------------
 ! DEF line and feature type parameters.
@@ -262,7 +265,6 @@ INCLUDE [if {"$(FMEGEN_DIRECTION)" == "Source"} {                             \
     };                                                                        \
 } else {                                                                      \
     puts { WORKBENCH_DEFLINE_PARMS                                            \
-    "GUI RANGE_SLIDER reportnet_writer_bulk_size 1%MAX%0 Bulk size:" "$(WRITER_BULK_SIZE)"                         \
     "GUI OPTIONAL TEXT reportnet_geom_column Spatial Column:" ""                         \
     "GUI LOOKUP_CHOICE  reportnet_validate_geom_type Pass<space>through,PT%Drop<space>feature,DF%Terminate<space>translation,TT Geometry type handling:" "$(VALIDATE_GEOM_TYPE)"  \
     };                                                                        \
@@ -275,7 +277,6 @@ DEST_ILLEGAL_ATTR_LIST                                   \
     reportnet_type text                                  \
     reportnet_geom_column text                           \
     reportnet_country_code text                          \
-    reportnet_writer_bulk_size integer                   \
     reportnet_where_clause text                          \
     reportnet_validate_geom_type text                    \
     $(CONFIGURATION_ILLEGAL_ATTR_LIST)

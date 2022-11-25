@@ -6,6 +6,8 @@ import re
 import requests
 import threading
 
+DEFAULT_TIMEOUT = 60
+
 def create_client(version,*args,**kwargs):
     '''Initiates a client for communication with the API endpoint'''
     if '0' == version:
@@ -192,7 +194,7 @@ class Reportnet3Client_v0_1(object):
         r.raise_for_status()
         #https://rn3api.eionet.europa.eu/dataset/6898/deleteImportTable/612f36c6cd0fd400016cf9b5?dataflowId={{dataflowId}}
 
-    def etl_import(self, dataflow_id, dataset_id, data, timeout=60):
+    def etl_import(self, dataflow_id, dataset_id, data, timeout=None):
         """Write table records to Reportnet3
 
         Reportnet3 Endpoints
@@ -208,7 +210,7 @@ class Reportnet3Client_v0_1(object):
         params = {"dataflowId": dataflow_id}
         if self.provider_id:
             params['providerId'] = self.provider_id
-        r = self.session.post(url, params=params, json=data, timeout=timeout or self.timeout)
+        r = self.session.post(url, params=params, json=data, timeout=timeout or self.timeout or DEFAULT_TIMEOUT)
         r.raise_for_status()
         r.close()
 

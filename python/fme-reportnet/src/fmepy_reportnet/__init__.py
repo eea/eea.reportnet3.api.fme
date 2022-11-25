@@ -21,5 +21,10 @@ def FME_createReader(reader_type, src_keyword, mapping_file):
     return reader_impl.Reportnet3Reader(reader_type, src_keyword, mapping_file)
 
 def FME_createWriter(writer_type, dest_keyword, mapping_file):
-    from . import writer
+    from fmegeneral.plugins import FMEMappingFileWrapper
+    mf_wrapper = FMEMappingFileWrapper(mapping_file, dest_keyword, writer_type)
+    if '1' == mf_wrapper.get('_REPORTNET_WRITER_VERSION'):
+        from . import writer_v1 as writer
+    else:
+        from . import writer_v0 as writer
     return writer.Reportnet3Writer(writer_type, dest_keyword, mapping_file)
