@@ -1,6 +1,6 @@
 # Reportnet 3 changes
 
-## v1.1.0
+## v1.0.2
 * "Bulk Size" parameter that controls how many FME Features is now a writer parameter instead of a feature type parameter
 * Writer parameter "Connection Timeout" was added
 
