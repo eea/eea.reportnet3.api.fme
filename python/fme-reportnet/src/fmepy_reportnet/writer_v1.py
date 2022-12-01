@@ -12,6 +12,9 @@ from fmeobjects import FMECoordSysManager, FMEException
 import json
 import requests
 from urllib.error import HTTPError
+import os.path
+from datetime import datetime
+import time
 
 MAX_CACHED_RECORDS = 10000
 WriterParams = collections.namedtuple(
@@ -84,6 +87,14 @@ class Reportnet3Writer(FMEWriter):
             , mappingFile.fetch(fmeconstants.kFME_DEBUG) is not None #True
         )
         self._logger.debug('%s: %s', self._logprefix, 'Writer created')
+        self._debug_geometry = self._mapping_file_wrapper.getFlag('_DEBUG_GEOMETRY')
+        self._debug_http_post = self._mapping_file_wrapper.get('_DEBUG_HTTP_POST')
+        if self._debug_http_post and not os.path.isdir(self._debug_http_post):
+            self._logger.error('%s: DEBUG_HTTP_POST must be set to an existing folder, current value is `%s`', self._logprefix, self._debug_http_post)
+            self._debug_http_post = None
+        
+        self._logger.debug('%s: %s=%s', self._logprefix, 'debug geometry', self._debug_geometry)
+        self._logger.debug('%s: %s=%s', self._logprefix, 'debug HTTP', self._debug_http_post)
         self._schemas = dict()
         self._cache = dict()
         self._cached_records = 0
@@ -228,6 +239,7 @@ class Reportnet3Writer(FMEWriter):
             , provider_id=credentials.PROVIDER_ID
             , timeout=self._params.connection_timeout
             , log_name=f'{self.__class__.__module__}.{self.__class__.__qualname__}'
+            , debug_http_post_folder=self._debug_http_post
         )
         self._logger.debug('%s: Client created - %s', self._logprefix, self._client)
         #self._logger.debug('%s:      defLines = `%s`', self._logprefix, [*self._mapping_file_wrapper.defLines()])
@@ -278,6 +290,9 @@ class Reportnet3Writer(FMEWriter):
                 if target_geom_column:
                     feature.performFunction('@JSONGeometry(TO_ATTRIBUTE,GEOJSON,__temp_geom__)')
                     temp_geom = json.loads(feature.getAttribute('__temp_geom__'))
+                    if self._debug_geometry:
+                        self._logger.debug('', temp_geom)
+                        self._logger.debug('%s: %s', self._logprefix, temp_geom)
                     feature.removeAttribute('__temp_geom__')
                     epsg_code =  FMECoordSysManager().getCoordSysAsOGCDef(feature.getCoordSys(), 'EPSG')
                     geom = {

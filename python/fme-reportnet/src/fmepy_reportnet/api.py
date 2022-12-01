@@ -5,8 +5,14 @@ import math
 import re
 import requests
 import threading
-
+from datetime import datetime
+import time
+import json
+import os.path
 DEFAULT_TIMEOUT = 60
+TO_VALID_FILENAME = {92: '', 47: '_', 58: '', 42: '', 63: '_', 34: '', 60: '', 62: ''}
+#                     \       /        :       *       ?        "       <       >
+
 
 def create_client(version,*args,**kwargs):
     '''Initiates a client for communication with the API endpoint'''
@@ -20,7 +26,7 @@ def create_client(version,*args,**kwargs):
 
 
 class Reportnet3Client_v0_1(object):
-    def __init__(self, api_key, base_url='https://rn3api.eionet.europa.eu', provider_id=None, timeout=10, paging=None,log_name=None,url_version_tag=''):
+    def __init__(self, api_key, base_url='https://rn3api.eionet.europa.eu', provider_id=None, timeout=10, paging=None,log_name=None,url_version_tag='', debug_http_post_folder=None):
 
         self.session = requests.Session()
         self.session.headers['Authorization'] = f'ApiKey {api_key}'
@@ -35,6 +41,10 @@ class Reportnet3Client_v0_1(object):
         self.logger.debug('__init__ %s.%s %s', self.__class__.__module__, self.__class__.__qualname__, __file__)
         self.url_version_tag = url_version_tag
         self.thread_local = threading.local()
+        self.debug_http_post_folder = debug_http_post_folder
+        self.etl_import_batches = 0
+        
+            
         """ TODO: Decide if we should take user_info into account
         self.user_info = self._get_user_by_user_id()
         self.provider_ids = {int(dataflow_id): provider_id for (token, dataflow_id, provider_id) in (s.split(',') for s in self.user_info.get('attributes', {}).get('ApiKeys')) if token == api_key}
@@ -206,11 +216,28 @@ class Reportnet3Client_v0_1(object):
         Version 0:
         * POST /dataset/{datasetId}/etlImport
         """
+        ts = datetime.now()
+        tic = time.perf_counter()
+        self.etl_import_batches += 1
         url = f'{self.base_url}/dataset{self.url_version_tag}/{dataset_id}/etlImport'
         params = {"dataflowId": dataflow_id}
         if self.provider_id:
             params['providerId'] = self.provider_id
         r = self.session.post(url, params=params, json=data, timeout=timeout or self.timeout or DEFAULT_TIMEOUT)
+        if self.debug_http_post_folder:
+            toc = time.perf_counter()
+            basename = '_'.join([
+                  ts.strftime('%Y%m%d_%H%M%S')
+                , f'{toc - tic:.2f}'
+                , str(self.etl_import_batches)
+                , url
+                , '&'.join(f'{k}={v}' for k,v in params.items())
+                , str(r.status_code)
+                ]).translate(TO_VALID_FILENAME)
+            fp = os.path.join(self.debug_http_post_folder, f'{basename}.json')
+            with open(fp, 'w', encoding='utf8') as fout:
+                json.dump(data, fout, ensure_ascii=False)
+            
         r.raise_for_status()
         r.close()
 

@@ -1,5 +1,14 @@
 # Reportnet 3 changes
 
+## v1.0.3
+* Verbose debugging can be controlled by using directives `EEA.REPORTNET.REPORTNET3_DEBUG_GEOMETRY` and `EEA.REPORTNET.REPORTNET3_DEBUG_HTTP_POST`. Example Workspace Header:
+```
+EEA.REPORTNET.REPORTNET3_DEBUG_GEOMETRY yes
+EEA.REPORTNET.REPORTNET3_DEBUG_HTTP_POST C:\temp\my_rn3_http_posts
+#! START_WB_HEADER
+...
+```
+
 ## v1.0.2
 * "Bulk Size" parameter that controls how many FME Features is now a writer parameter instead of a feature type parameter
 * Writer parameter "Connection Timeout" was added
