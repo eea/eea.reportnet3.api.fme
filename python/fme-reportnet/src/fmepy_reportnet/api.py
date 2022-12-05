@@ -9,6 +9,7 @@ from datetime import datetime
 import time
 import json
 import os.path
+import shutil
 DEFAULT_TIMEOUT = 60
 TO_VALID_FILENAME = {92: '', 47: '_', 58: '', 42: '', 63: '_', 34: '', 60: '', 62: ''}
 #                     \       /        :       *       ?        "       <       >
@@ -39,6 +40,8 @@ class Reportnet3Client_v0_1(object):
         self.paging = paging
         self.logger = logging.getLogger(log_name or f'{self.__class__.__module__}.{self.__class__.__qualname__}')
         self.logger.debug('__init__ %s.%s %s', self.__class__.__module__, self.__class__.__qualname__, __file__)
+        self.logger.debug('__init__ %s %s %s %s %s %s %s %s', api_key                            , base_url                           , provider_id, timeout, paging, log_name                                 , url_version_tag, debug_http_post_folder)
+        #                                      EBUG: __init__ 8d34e04d-25a7-4fff-98e9-81f83247d0bf https://test-api.reportnet.europa.eu              120      None    fmepy_reportnet.writer_v1.Reportnet3Writer /v1              C:\temp\rn3_debug_http_post
         self.url_version_tag = url_version_tag
         self.thread_local = threading.local()
         self.debug_http_post_folder = debug_http_post_folder
@@ -162,6 +165,7 @@ class Reportnet3Client_v0_1(object):
         Version 0:
         GET /dataschema/getTableSchemasIds/{datasetId}
         """
+        self.logger.debug('table_schema_ids `%s` `%s` `%s`', dataflow_id, dataset_id, timeout)
         url = f'{self.base_url}/dataschema{self.url_version_tag}/getTableSchemasIds/{dataset_id}'
         params = {'dataflowId': dataflow_id}
         r = self.session.get(
@@ -204,6 +208,37 @@ class Reportnet3Client_v0_1(object):
         r.raise_for_status()
         #https://rn3api.eionet.europa.eu/dataset/6898/deleteImportTable/612f36c6cd0fd400016cf9b5?dataflowId={{dataflowId}}
 
+    def import_file_data(self, dataflow_id, dataset_id, table_schema_id, csv_filepath, delimiter=",", replace=False, timeout=None):
+        #https://test-api.reportnet.europa.eu/dataset/v2/importFileData/8974
+        #dataflowId
+        #delimiter
+        #replace
+        #tableSchemaId
+        ts = datetime.now()
+        tic = time.perf_counter()
+        self.etl_import_batches += 1
+        url = f'{self.base_url}/dataset/v2/importFileData/{dataset_id}'
+        params = {'dataflowId': dataflow_id, 'delimiter': delimiter, 'replace': ['false', 'true'][replace], 'tableSchemaId': table_schema_id}
+        if self.provider_id:
+            params['providerId'] = self.provider_id
+        with open(csv_filepath, 'rb') as fin:
+            r = self.session.post(url, params=params, files={'file': ('file.csv', fin, 'application/octet-stream')}, timeout=timeout or self.timeout or DEFAULT_TIMEOUT)
+            if self.debug_http_post_folder:
+                toc = time.perf_counter()
+                basename = '_'.join([
+                    ts.strftime('%Y%m%d_%H%M%S')
+                    , f'{toc - tic:.2f}'
+                    , str(self.etl_import_batches)
+                    , url
+                    , '&'.join(f'{k}={v}' for k,v in params.items())
+                    , str(r.status_code)
+                    ]).translate(TO_VALID_FILENAME)
+                fp = os.path.join(self.debug_http_post_folder, f'{basename}.csv')
+                shutil.copyfile(csv_filepath, fp)            
+            r.raise_for_status()
+            r.close()
+
+        pass
     def etl_import(self, dataflow_id, dataset_id, data, timeout=None):
         """Write table records to Reportnet3
 

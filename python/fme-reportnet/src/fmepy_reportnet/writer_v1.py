@@ -87,12 +87,14 @@ class Reportnet3Writer(FMEWriter):
             , mappingFile.fetch(fmeconstants.kFME_DEBUG) is not None #True
         )
         self._logger.debug('%s: %s', self._logprefix, 'Writer created')
+        self._use_import_file_data = self._mapping_file_wrapper.getFlag('_EXPERIMENTAL_IMPORT_FILE_DATA')
         self._debug_geometry = self._mapping_file_wrapper.getFlag('_DEBUG_GEOMETRY')
         self._debug_http_post = self._mapping_file_wrapper.get('_DEBUG_HTTP_POST')
         if self._debug_http_post and not os.path.isdir(self._debug_http_post):
             self._logger.error('%s: DEBUG_HTTP_POST must be set to an existing folder, current value is `%s`', self._logprefix, self._debug_http_post)
             self._debug_http_post = None
         
+        self._logger.debug('%s: %s=%s', self._logprefix, 'use importFileData', self._use_import_file_data)
         self._logger.debug('%s: %s=%s', self._logprefix, 'debug geometry', self._debug_geometry)
         self._logger.debug('%s: %s=%s', self._logprefix, 'debug HTTP', self._debug_http_post)
         self._schemas = dict()
@@ -102,13 +104,53 @@ class Reportnet3Writer(FMEWriter):
         self._client = None
         self._aborted = False
         self._params = None
+    def _import_file_data(self):
+        import tempfile
+        import os.path
+        import csv
+        with tempfile.TemporaryDirectory() as tempdir:
+            for i, ((featuretype, schema_name), records) in enumerate(self._cache.items()):
+                schema = self._schemas.get(schema_name)
+                self._logger.debug('%s: using schema\n%s', self._logprefix, schema)
+                tempfilepath = os.path.join(tempdir, f'{i}.csv')
+                self._logger.debug('%s: writing %s record(s) to temporary CSV-file `%s`', self._logprefix, len(records), tempfilepath)
+                
+                with open(tempfilepath, 'w', newline='', encoding='utf8') as csvfile:
+                    csvwriter = csv.writer(csvfile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+                    fieldnames = list(schema.attribute_types.keys()) + [n for n,t in [schema.geometry] if n]
+                    csvwriter.writerow(fieldnames)
+                    for rec in records:
+                        row = {k: None for k in fieldnames}
+                        for f in rec['fields']:
+                            row[f['fieldName']] = f['value']
+                        csvwriter.writerow(row.values())
+                try:
+                    #import_file_data(self, dataflow_id, dataset_id, table_schema_id, csv_filepath, delimiter=",", replace=False, timeout=None)    
+                    self._client.import_file_data(self._params.dataflow.id, self._params.reportnet_dataset.id, schema.id, tempfilepath)
+                except requests.exceptions.ReadTimeout as e:
+                    msg = [str(e.__class__)]
+                    msg.append(f'A read timeout occured, consider increasing the value of parameter "Connection Timeout", current value is {self._params.connection_timeout} second(s)')
+                    raise FMEException('\n'.join(msg))
+                except requests.exceptions.HTTPError as e:
+                    if str(e).startswith('504 Server Error: Gateway Time-out'):
+                        msg = [str(e.__class__)]
+                        msg.append(f'An "HTTP 504 Gateway Timeout" occured, consider decreasing the value of parameter "Bulk Size", current value is {self._params.writer_bulk_size} features')
+                        raise FMEException('\n'.join(msg))
+                    raise FMEException(str(e))
+                except Exception as e:
+                    raise FMEException(str(e.__class__) + ' ' + str(e))
+        self._cached_records = 0
+        self._cache = dict()
     def _flush(self):
+        if self._use_import_file_data:
+            return self._import_file_data()
         data = {
             "tables": [
-                {"tableName": k, "records": v}
-                for k,v in self._cache.items()
+                {"tableName": featuretype, "records": v}
+                for (featuretype, schema_name),v in self._cache.items()
                 ]
             }
+        
         self._logger.debug('%s: importing %s record(s)', self._logprefix, self._cached_records)
         try:
             self._client.etl_import(self._params.dataflow.id, self._params.reportnet_dataset.id, data, timeout=self._params.connection_timeout)
@@ -243,6 +285,12 @@ class Reportnet3Writer(FMEWriter):
         )
         self._logger.debug('%s: Client created - %s', self._logprefix, self._client)
         #self._logger.debug('%s:      defLines = `%s`', self._logprefix, [*self._mapping_file_wrapper.defLines()])
+        
+        if self._use_import_file_data:
+            for name, id in self._client.table_schema_ids(self._params.dataflow.id, self._params.reportnet_dataset.id):
+                if not name in self._schemas:
+                    continue
+                self._schemas[name].id = id
     def rollbackTransaction(self):
         pass
     def startTransaction(self):
@@ -321,9 +369,10 @@ class Reportnet3Writer(FMEWriter):
         #if self._cached_records and not self._cached_records % MAX_CACHED_RECORDS:
         if self._cached_records and not self._cached_records % self._params.writer_bulk_size:
             self._flush()
-        if not featuretype in self._cache:
-            self._cache[featuretype] = []
-        self._cache[featuretype].append(record)
+        cache_key = (featuretype, schema_name)
+        if not cache_key in self._cache:
+            self._cache[cache_key] = []
+        self._cache[cache_key].append(record)
         self._cached_records += 1
 
 def encodeValue(value):
