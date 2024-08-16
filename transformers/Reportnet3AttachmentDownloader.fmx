@@ -4,6 +4,8 @@ TRANSFORMER_NAME: eea.reportnet.Reportnet3AttachmentDownloader
 
 VERSION: 3
 
+PYTHON_COMPATIBILITY: 38
+
 ALIASES: AttachmentDownloader
 
 CATEGORY: Web,Workflows 
