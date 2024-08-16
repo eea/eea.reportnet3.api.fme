@@ -213,7 +213,10 @@ WORKBENCH_ATTR_INDEX_TYPES RowID
 
 
 MACRO SourceExposableAttrs                                                    \
-   reportnet_country_code                TEXT
+   reportnet_country_code                TEXT                                 \
+   reportnet_id_table_schema             TEXT                                 \
+   reportnet_id_record                   TEXT
+
 
 MACRO DestExposableAttrs
 
@@ -274,11 +277,13 @@ INCLUDE [if {"$(FMEGEN_DIRECTION)" == "Source"} {                             \
 ! The list of words that are not allowed to be attributes
 ! TODO: All format attributes should be included here.
 DEST_ILLEGAL_ATTR_LIST                                   \
-    reportnet_type text                                  \
-    reportnet_geom_column text                           \
-    reportnet_country_code text                          \
-    reportnet_where_clause text                          \
-    reportnet_validate_geom_type text                    \
+    reportnet_type                                       \
+    reportnet_geom_column                                \
+    reportnet_country_code                               \
+    reportnet_id_table_schema                            \
+    reportnet_id_record                                  \
+    reportnet_where_clause                               \
+    reportnet_validate_geom_type                         \
     $(CONFIGURATION_ILLEGAL_ATTR_LIST)
 
 ! ------------------------------------------------------------------------------

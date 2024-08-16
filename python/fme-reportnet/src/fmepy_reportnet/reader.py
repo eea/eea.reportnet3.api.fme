@@ -325,7 +325,9 @@ class Reportnet3Reader(FMEReader):
 
                 geom_field_name, geom_field_type = schema.geometry
                 feature.setAttribute("reportnet_geom_column", geom_field_name)
-                feature.setAttribute("reportnet_country_code", row["countryCode"] or '')
+                feature.setAttribute("reportnet_country_code", row.get('countryCode', ''))
+                feature.setAttribute("reportnet_id_table_schema", row.get('id_table_schema', ''))
+                feature.setAttribute("reportnet_id_record", row.get('id_record', ''))
 
                 # Set attributes onto the feature.
                 # As the metafile defines ATTRIBUTE_READING to ALL,
