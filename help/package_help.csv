@@ -1,6 +1,5 @@
 rw_eea_reportnet_reportnet3_index,/pkg-reportnet3/index.html
 rw_eea_reportnet_reportnet3_feature_rep,/pkg-reportnet3/feature-representation.html
-rw_quick_facts_eea_reportnet_reportnet3,/pkg-reportnet3/quick-facts-reportnet3.html
 param_eea_reportnet_reportnet3_r,/pkg-reportnet3/reader-parameters.html
 ft_eea_reportnet_reportnet3_param_r,/pkg-reportnet3/reader-feature-type-param.html
 ft_eea_reportnet_reportnet3_user_attr,/pkg-reportnet3/user-attributes.html
