@@ -1,5 +1,10 @@
 # Reportnet 3 changes
 
+## v1.1.0
+* Two new format attributes were added:
+   * `reportnet_id_table_schema` - Id of the table schema
+   * `reportnet_id_record` - Id of the record
+
 ## v1.0.3
 * Verbose debugging can be controlled by using directives `EEA.REPORTNET.REPORTNET3_DEBUG_GEOMETRY` and `EEA.REPORTNET.REPORTNET3_DEBUG_HTTP_POST`. Example Workspace Header:
 ```
