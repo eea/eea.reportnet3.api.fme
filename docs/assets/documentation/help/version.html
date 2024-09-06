@@ -1,17 +1,16 @@
 <!DOCTYPE HTML>
-<html lang="en" class="sidebar-visible no-js light">
+<html lang="en" class="light" dir="ltr">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Version Info - eea.reportnet [1.0.1]</title>
+        <title>Version Info - eea.reportnet [1.1.0]</title>
 
 
         <!-- Custom HTML head -->
         
-        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#ffffff" />
+        <meta name="theme-color" content="#ffffff">
 
         <link rel="shortcut icon" href="favicon.png">
         <link rel="stylesheet" href="css/variables.css">
@@ -31,15 +30,16 @@
         <!-- Custom theme stylesheets -->
 
     </head>
-    <body>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
         <!-- Provide site root to javascript -->
-        <script type="text/javascript">
+        <script>
             var path_to_root = "";
             var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
         </script>
 
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
-        <script type="text/javascript">
+        <script>
             try {
                 var theme = localStorage.getItem('mdbook-theme');
                 var sidebar = localStorage.getItem('mdbook-sidebar');
@@ -55,50 +55,81 @@
         </script>
 
         <!-- Set the theme before any content is loaded, prevents flash -->
-        <script type="text/javascript">
+        <script>
             var theme;
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
             var html = document.querySelector('html');
-            html.classList.remove('no-js')
             html.classList.remove('light')
             html.classList.add(theme);
-            html.classList.add('js');
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
         </script>
 
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
         <!-- Hide / unhide sidebar before it is displayed -->
-        <script type="text/javascript">
-            var html = document.querySelector('html');
-            var sidebar = 'hidden';
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
             }
-            html.classList.remove('sidebar-visible');
-            html.classList.add("sidebar-" + sidebar);
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="overview.html">Overview</a></li><li class="chapter-item expanded "><a href="quick-facts-reportnet3.html">Quick Facts</a></li><li class="chapter-item expanded "><a href="feature-representation.html">Feature Representation</a></li><li class="chapter-item expanded "><a href="reader-parameters.html">Reader Parameters</a></li><li class="chapter-item expanded "><a href="reader-feature-type-param.html">Reader Feature Type Parameters</a></li><li class="chapter-item expanded "><a href="writer-feature-type-param.html">Writer Feature Type Parameters</a></li><li class="chapter-item expanded "><a href="user-attributes.html">User Attributes</a></li><li class="chapter-item expanded "><a href="reportnet3attachmentdownloader.html">Reportnet3AttachmentDownloader</a></li><li class="chapter-item expanded affix "><li class="part-title">Advanced</li><li class="chapter-item expanded "><a href="reportnet3connectionstring.html">Dynamic Connection String</a></li><li class="chapter-item expanded "><a href="version.html" class="active">Version Info</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="overview.html">Overview</a></li><li class="chapter-item expanded "><a href="quick-facts-reportnet3.html">Quick Facts</a></li><li class="chapter-item expanded "><a href="feature-representation.html">Feature Representation</a></li><li class="chapter-item expanded "><a href="reader-parameters.html">Reader Parameters</a></li><li class="chapter-item expanded "><a href="reader-feature-type-param.html">Reader Feature Type Parameters</a></li><li class="chapter-item expanded "><a href="writer-parameters.html">Writer Parameters</a></li><li class="chapter-item expanded "><a href="writer-feature-type-param.html">Writer Feature Type Parameters</a></li><li class="chapter-item expanded "><a href="user-attributes.html">User Attributes</a></li><li class="chapter-item expanded "><a href="reportnet3attachmentdownloader.html">Reportnet3AttachmentDownloader</a></li><li class="chapter-item expanded affix "><li class="part-title">Advanced</li><li class="chapter-item expanded "><a href="reportnet3connectionstring.html">Dynamic Connection String</a></li><li class="chapter-item expanded "><a href="debugging.html">Debugging</a></li><li class="chapter-item expanded "><a href="version.html" class="active">Version Info</a></li></ol>
             </div>
-            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
         </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
 
         <div id="page-wrapper" class="page-wrapper">
 
             <div class="page">
                                 <div id="menu-bar-hover-placeholder"></div>
-                <div id="menu-bar" class="menu-bar sticky bordered">
+                <div id="menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
-                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
                             <i class="fa fa-bars"></i>
-                        </button>
+                        </label>
                         <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
                             <i class="fa fa-paint-brush"></i>
                         </button>
                         <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
@@ -109,7 +140,7 @@
                         </button>
                     </div>
 
-                    <h1 class="menu-title">eea.reportnet [1.0.1]</h1>
+                    <h1 class="menu-title">eea.reportnet [1.1.0]</h1>
 
                     <div class="right-buttons">
                         <a href="print.html" title="Print this book" aria-label="Print this book">
@@ -131,7 +162,7 @@
                 </div>
 
                 <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
-                <script type="text/javascript">
+                <script>
                     document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
                     document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
                     Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
@@ -148,7 +179,7 @@ uid: reportnet
 publisher_uid: eea
 name: Reportnet 3
 description: Access to European Environment Agency environmental and climate reporting data.
-version: 1.0.1
+version: 1.1.0
 minimum_fme_build: 21222
 author:
   name: EEA
@@ -156,7 +187,7 @@ author:
 package_content:
   transformers:
     - name: Reportnet3AttachmentDownloader
-      version: 2
+      version: 3
   formats:
       - name: reportnet3
   python_packages:
@@ -166,8 +197,31 @@ package_content:
       - name: Reportnet 3.xml
 </code></pre>
 <h2 id="commit"><a class="header" href="#commit">Commit</a></h2>
-<p><a href="https://github.com/eea/eea.reportnet3.api.fme/tree/085487f472bbea5e6a7d94dd30f083ffa910bdb2">eea.reportnet3.api.fme@085487f472bbea5e6a7d94dd30f083ffa910bdb2</a></p>
+<p><a href="https://github.com/eea/eea.reportnet3.api.fme/tree/1edec830d992e8bb386887b6a00528da555d0740">eea.reportnet3.api.fme@1edec830d992e8bb386887b6a00528da555d0740</a></p>
 <h1 id="reportnet-3-changes"><a class="header" href="#reportnet-3-changes">Reportnet 3 changes</a></h1>
+<h2 id="v110"><a class="header" href="#v110">v1.1.0</a></h2>
+<ul>
+<li>Two new format attributes were added:
+<ul>
+<li><code>reportnet_id_table_schema</code> - Id of the table schema</li>
+<li><code>reportnet_id_record</code> - Id of the record</li>
+</ul>
+</li>
+</ul>
+<h2 id="v103"><a class="header" href="#v103">v1.0.3</a></h2>
+<ul>
+<li>Verbose debugging can be controlled by using directives <code>EEA.REPORTNET.REPORTNET3_DEBUG_GEOMETRY</code> and <code>EEA.REPORTNET.REPORTNET3_DEBUG_HTTP_POST</code>. Example Workspace Header:</li>
+</ul>
+<pre><code>EEA.REPORTNET.REPORTNET3_DEBUG_GEOMETRY yes
+EEA.REPORTNET.REPORTNET3_DEBUG_HTTP_POST C:\temp\my_rn3_http_posts
+#! START_WB_HEADER
+...
+</code></pre>
+<h2 id="v102"><a class="header" href="#v102">v1.0.2</a></h2>
+<ul>
+<li>"Bulk Size" parameter that controls how many FME Features is now a writer parameter instead of a feature type parameter</li>
+<li>Writer parameter "Connection Timeout" was added</li>
+</ul>
 <h2 id="v101"><a class="header" href="#v101">v1.0.1</a></h2>
 <p>README updated</p>
 <h2 id="v100"><a class="header" href="#v100">v1.0.0</a></h2>
@@ -175,7 +229,7 @@ package_content:
 <p>Errors when parsing geometry should now be more detailed</p>
 <h2 id="v027"><a class="header" href="#v027">v0.2.7</a></h2>
 <p>The setting for Dataflow ID has now moved into the connection parameters.</p>
-<p>Because of this, the named connection has got a &quot;version bump&quot;, i.e. named connections created with earlier versions of the reportnet3 package will not work with this version of the reader/writer/transformer.</p>
+<p>Because of this, the named connection has got a "version bump", i.e. named connections created with earlier versions of the reportnet3 package will not work with this version of the reader/writer/transformer.</p>
 <p>Workspaces created with earlier versions of the reportnet3 package should continue to work.</p>
 <h2 id="v026"><a class="header" href="#v026">v0.2.6</a></h2>
 <p>Let Readers inherit name from the selected webconnection</p>
@@ -189,7 +243,7 @@ package_content:
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="reportnet3connectionstring.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="debugging.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
@@ -200,7 +254,7 @@ package_content:
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="reportnet3connectionstring.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="debugging.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
@@ -211,21 +265,22 @@ package_content:
 
 
 
-        <script type="text/javascript">
+        <script>
             window.playground_copyable = true;
         </script>
 
 
-        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
 
-        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
-        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
 
         <!-- Custom JS scripts -->
 
 
+    </div>
     </body>
 </html>

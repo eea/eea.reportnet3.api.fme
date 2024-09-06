@@ -1,18 +1,17 @@
 <!DOCTYPE HTML>
-<html lang="en" class="sidebar-visible no-js light">
+<html lang="en" class="light" dir="ltr">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>eea.reportnet [1.0.1]</title>
-        <meta name="robots" content="noindex" />
+        <title>eea.reportnet [1.1.0]</title>
+        <meta name="robots" content="noindex">
 
 
         <!-- Custom HTML head -->
         
-        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#ffffff" />
+        <meta name="theme-color" content="#ffffff">
 
         <link rel="shortcut icon" href="favicon.png">
         <link rel="stylesheet" href="css/variables.css">
@@ -32,15 +31,16 @@
         <!-- Custom theme stylesheets -->
 
     </head>
-    <body>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
         <!-- Provide site root to javascript -->
-        <script type="text/javascript">
+        <script>
             var path_to_root = "";
             var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
         </script>
 
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
-        <script type="text/javascript">
+        <script>
             try {
                 var theme = localStorage.getItem('mdbook-theme');
                 var sidebar = localStorage.getItem('mdbook-sidebar');
@@ -56,50 +56,81 @@
         </script>
 
         <!-- Set the theme before any content is loaded, prevents flash -->
-        <script type="text/javascript">
+        <script>
             var theme;
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
             var html = document.querySelector('html');
-            html.classList.remove('no-js')
             html.classList.remove('light')
             html.classList.add(theme);
-            html.classList.add('js');
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
         </script>
 
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
         <!-- Hide / unhide sidebar before it is displayed -->
-        <script type="text/javascript">
-            var html = document.querySelector('html');
-            var sidebar = 'hidden';
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
             }
-            html.classList.remove('sidebar-visible');
-            html.classList.add("sidebar-" + sidebar);
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="overview.html">Overview</a></li><li class="chapter-item expanded "><a href="quick-facts-reportnet3.html">Quick Facts</a></li><li class="chapter-item expanded "><a href="feature-representation.html">Feature Representation</a></li><li class="chapter-item expanded "><a href="reader-parameters.html">Reader Parameters</a></li><li class="chapter-item expanded "><a href="reader-feature-type-param.html">Reader Feature Type Parameters</a></li><li class="chapter-item expanded "><a href="writer-feature-type-param.html">Writer Feature Type Parameters</a></li><li class="chapter-item expanded "><a href="user-attributes.html">User Attributes</a></li><li class="chapter-item expanded "><a href="reportnet3attachmentdownloader.html">Reportnet3AttachmentDownloader</a></li><li class="chapter-item expanded affix "><li class="part-title">Advanced</li><li class="chapter-item expanded "><a href="reportnet3connectionstring.html">Dynamic Connection String</a></li><li class="chapter-item expanded "><a href="version.html">Version Info</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="overview.html">Overview</a></li><li class="chapter-item expanded "><a href="quick-facts-reportnet3.html">Quick Facts</a></li><li class="chapter-item expanded "><a href="feature-representation.html">Feature Representation</a></li><li class="chapter-item expanded "><a href="reader-parameters.html">Reader Parameters</a></li><li class="chapter-item expanded "><a href="reader-feature-type-param.html">Reader Feature Type Parameters</a></li><li class="chapter-item expanded "><a href="writer-parameters.html">Writer Parameters</a></li><li class="chapter-item expanded "><a href="writer-feature-type-param.html">Writer Feature Type Parameters</a></li><li class="chapter-item expanded "><a href="user-attributes.html">User Attributes</a></li><li class="chapter-item expanded "><a href="reportnet3attachmentdownloader.html">Reportnet3AttachmentDownloader</a></li><li class="chapter-item expanded affix "><li class="part-title">Advanced</li><li class="chapter-item expanded "><a href="reportnet3connectionstring.html">Dynamic Connection String</a></li><li class="chapter-item expanded "><a href="debugging.html">Debugging</a></li><li class="chapter-item expanded "><a href="version.html">Version Info</a></li></ol>
             </div>
-            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
         </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
 
         <div id="page-wrapper" class="page-wrapper">
 
             <div class="page">
                                 <div id="menu-bar-hover-placeholder"></div>
-                <div id="menu-bar" class="menu-bar sticky bordered">
+                <div id="menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
-                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
                             <i class="fa fa-bars"></i>
-                        </button>
+                        </label>
                         <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
                             <i class="fa fa-paint-brush"></i>
                         </button>
                         <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
@@ -110,7 +141,7 @@
                         </button>
                     </div>
 
-                    <h1 class="menu-title">eea.reportnet [1.0.1]</h1>
+                    <h1 class="menu-title">eea.reportnet [1.1.0]</h1>
 
                     <div class="right-buttons">
                         <a href="print.html" title="Print this book" aria-label="Print this book">
@@ -132,7 +163,7 @@
                 </div>
 
                 <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
-                <script type="text/javascript">
+                <script>
                     document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
                     document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
                     Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
@@ -199,14 +230,16 @@
 <tr><td>reportnet_type</td><td>Read-only</td><td><code>reportnet_none</code>, <code>reportnet_point</code>, <code>reportnet_linestring</code>, <code>reportnet_polygon</code></td></tr>
 <tr><td>reportnet_geom_column</td><td>Read-only</td><td>The Reportnet3 field that was used to create FME geometry.</td></tr>
 <tr><td>reportnet_country_code</td><td>Read-only</td><td>The reporting country (when applicable).</td></tr>
+<tr><td>reportnet_id_table_schema</td><td>Read-only</td><td>Id of the table schema (when applicable).</td></tr>
+<tr><td>reportnet_id_record</td><td>Read-only</td><td>Id of the record (when applicable).</td></tr>
 </tbody></table>
 </div><div style="break-before: page; page-break-before: always;"></div><h1 id="reportnet-3-reader-parameters"><a class="header" href="#reportnet-3-reader-parameters">Reportnet 3 Reader Parameters</a></h1>
 <h3 id="reportnet-3-connection"><a class="header" href="#reportnet-3-connection">Reportnet 3 Connection</a></h3>
-<p>The Reportnet 3 Reader uses a Reportnet 3 Web Connection. </p>
+<p>The Reportnet 3 Reader uses a Reportnet 3 Web Connection.</p>
 <p>The connection should be configured with an API-key, a Dataflow ID and optionally Provider ID from the e-Reporting platform.</p>
 <h3 id="dataset"><a class="header" href="#dataset">Dataset</a></h3>
 <p>The Reportnet 3 <em>Dataset</em></p>
-<p>When selecting the Reportnet Dataset using the browse-button, the value will be encoded for readability, e.g. &quot;My Dataset (42)&quot;, where 42 corresponds to the dataset id.</p>
+<p>When selecting the Reportnet Dataset using the browse-button, the value will be encoded for readability, e.g. "My Dataset (42)", where 42 corresponds to the dataset id.</p>
 <p>When supplying the value for dataset dynamically, such as when used in a FeatureReader, it is valid to only specify the numeric id.</p>
 <h3 id="tables"><a class="header" href="#tables">Table(s)</a></h3>
 <p>The Reportnet 3 <em>Table(s)</em> to read from the selected <em>Dataflow/Dataset</em></p>
@@ -216,13 +249,13 @@
 <p>Depending on how many fields a table has, the optimal value may differ.</p>
 <p>Setting a value lower than <code>1</code> is not supported.</p>
 <h3 id="concurrent-http-requests"><a class="header" href="#concurrent-http-requests">Concurrent HTTP requests</a></h3>
-<p>The reader will fetch pages in parallel up to the specified number of concurrent requests. </p>
+<p>The reader will fetch pages in parallel up to the specified number of concurrent requests.</p>
 <p>In some scenarios it <em>can</em> be possible to increase the throughput by carefully configure the bulk size in combination with number of concurrent requests.</p>
 <h3 id="connection-timeout-seconds"><a class="header" href="#connection-timeout-seconds">Connection Timeout (seconds)</a></h3>
 <p>Timeout value for the <em>full</em> download time.</p>
 <p>If retrieving data from the Reportnet3 HTTP API backend is not finished within <code>timeout</code> seconds, the connection is aborted and an exception is raised.</p>
 <h3 id="force-data-types"><a class="header" href="#force-data-types">Force data types</a></h3>
-<p>If set to <code>Yes</code>, FME will try to parse the text-values retrieved from the Reportnet3 HTTP API backend into the closest corresponding FME type, e.g. &quot;5&quot; NUMBER_INTEGER is parsed into an FME integer value of 5.</p>
+<p>If set to <code>Yes</code>, FME will try to parse the text-values retrieved from the Reportnet3 HTTP API backend into the closest corresponding FME type, e.g. "5" NUMBER_INTEGER is parsed into an FME integer value of 5.</p>
 <p>If set to <code>No</code>, interpretation is <em>not</em> performed and all values are passed to FME as text regardless of the declared type.</p>
 <h3 id="parse-geometry"><a class="header" href="#parse-geometry">Parse geometry</a></h3>
 <p>If set to <code>Yes</code>, FME will try to convert a geometry column to an FME geometry. The geometry column will be dropped from schema. The name of the geometry column will be stored in the format paramater <code>reportnet_geom_column</code>.</p>
@@ -237,10 +270,10 @@
 <li>In a non-dynamic scenario, this parameter allows you to expose additional attributes on multiple feature types. Click the browse button to view the available format attributes (which are different for each format) for the reader.</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="reportnet-3-reader-feature-type-parameters"><a class="header" href="#reportnet-3-reader-feature-type-parameters">Reportnet 3 Reader Feature Type Parameters</a></h1>
-<p>To access feature type parameters, click the gear icon on a feature type in the workspace. This opens the Feature Type Parameter Editor. </p>
+<p>To access feature type parameters, click the gear icon on a feature type in the workspace. This opens the Feature Type Parameter Editor.</p>
 <h2 id="options"><a class="header" href="#options">Options</a></h2>
 <h3 id="where-clause"><a class="header" href="#where-clause">WHERE Clause</a></h3>
-<p>A <em>limited</em> filtering is supported by supplying a where-clause. </p>
+<p>A <em>limited</em> filtering is supported by supplying a where-clause.</p>
 <p>The where clause must contain exactly one predicate in the form:</p>
 <pre><code>&lt;identifier&gt; = &lt;literal-value&gt;
 </code></pre>
@@ -253,27 +286,33 @@
 <pre><code class="language-sql">    r = 10.2
 </code></pre>
 <p>Double quotes must be used if the field name contains special characters like whitespace:</p>
-<pre><code class="language-sql">    &quot;my field&quot; = 'Some text'
+<pre><code class="language-sql">    "my field" = 'Some text'
 </code></pre>
 <p>Single quotes in a string literal needs to be escaped by doubling them:</p>
-<pre><code class="language-sql">    &quot;my doc&quot; = 'I''d like to code more'
+<pre><code class="language-sql">    "my doc" = 'I''d like to code more'
 </code></pre>
 <p>Newlines should be ok but can be tricky.</p>
-<pre><code class="language-sql">    &quot;my doc&quot; = 'A longer text 
+<pre><code class="language-sql">    "my doc" = 'A longer text 
     Newlines should be ok'
 </code></pre>
 <p>In order to use specific newline character(s), url-encoding can be used:</p>
-<pre><code class="language-sql">    &quot;my doc&quot; = 'First line%0D%0ASecond line separated by CRLF'
+<pre><code class="language-sql">    "my doc" = 'First line%0D%0ASecond line separated by CRLF'
 </code></pre>
-<pre><code class="language-sql">    &quot;my doc&quot; = 'First line%0ASecond line separated by LF'
+<pre><code class="language-sql">    "my doc" = 'First line%0ASecond line separated by LF'
 </code></pre>
-<pre><code class="language-sql">    &quot;my doc&quot; = 'First line%0DSecond line separated by CR'
+<pre><code class="language-sql">    "my doc" = 'First line%0DSecond line separated by CR'
 </code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="reportnet-3-writer-parameters"><a class="header" href="#reportnet-3-writer-parameters">Reportnet 3 Writer Parameters</a></h1>
+<h3 id="bulk-size-1"><a class="header" href="#bulk-size-1">Bulk Size</a></h3>
+<p>The parameter adjusts how many FME features will be bundled together for each HTTP transactions to the Reportnet 3 API. The parameter is required with a value larger than 0.</p>
+<h3 id="connection-timeout"><a class="header" href="#connection-timeout">Connection Timeout</a></h3>
+<p>Timeout value for the upload time.</p>
+<p>If importing data to the Reportnet3 HTTP API backend is not finished within <code>timeout</code> seconds, the connection is aborted and an exception is raised.</p>
+<p>The import is performed in chunks controlled by "Bulk Size". The timeout is set on each HTTP transaction.</p>
+<p>For optimal performance, the "Bulk Size" and "Connection Timeout", may need to be adopted for different datasets.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="reportnet-3-writer-feature-type-parameters"><a class="header" href="#reportnet-3-writer-feature-type-parameters">Reportnet 3 Writer Feature Type Parameters</a></h1>
 <p>To access feature type parameters, click the gear icon on a feature type in the workspace. This opens the Feature Type Parameter Editor.</p>
 <h2 id="options-1"><a class="header" href="#options-1">Options</a></h2>
-<h3 id="bulk-size-1"><a class="header" href="#bulk-size-1">Bulk Size</a></h3>
-<p>The parameter adjusts how many FME features will be bundled togather for each HTTP transactions to the Reportnet 3 API. The parameter is required with a value larger than 0.</p>
 <h3 id="spatial-column"><a class="header" href="#spatial-column">Spatial Column</a></h3>
 <p>Determines target attribute in Reportnet 3 to store the FME geometry. If Spatial Column is not defined, the writer will attempt to use the format attribute <code>reportnet_geom_column</code> as fallback. If the FME feature has a geometry and neither Spatial Column nor <code>reportnet_geom_column</code> was present, the writer will ignore geometry writing and output a warning message.</p>
 <h3 id="geometry-type-handling"><a class="header" href="#geometry-type-handling">Geometry type handling</a></h3>
@@ -363,6 +402,34 @@ https://test-api.reportnet.europa.eu?VERSION=2&amp;API_KEY=502982a2-95a5-43ae-bf
 </code></pre>
 <p>Please note that in version 2, <code>DATAFLOW_ID</code> was added as a mandatory url-query-parameter.</p>
 <p>This logic is applied both on the reader, writer and the Reportnet3AttachmentDownloader.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="debugging"><a class="header" href="#debugging">Debugging</a></h1>
+<p>The Reader/Writer has the ability to produce different kinds of debug information.</p>
+<p>Please be aware that the debugging settings will cause <em>a lot</em> of extra I/O. In most cases, this is <em><strong>not preferred in a production environment</strong></em>.</p>
+<h2 id="fme-log-message-filter"><a class="header" href="#fme-log-message-filter">FME Log Message Filter</a></h2>
+<p>In FME Workbench, go to "Tools/FME Options.../Translation/Log Message Filter" and check/uncheck the option "Log Debug":
+<img src="./images/log_debug.png" alt="log_debug.png" /></p>
+<h2 id="readerwriter-directives"><a class="header" href="#readerwriter-directives">Reader/Writer Directives</a></h2>
+<p>There are no normal GUI parameters for these settings. Instead they can be edited using the "Workspace Header".</p>
+<p>In FME Workbench, Go to "Tools/Edit Header..." and enter the directives:
+<img src="./images/workspace_header.png" alt="workspace_header.png" /></p>
+<h3 id="eeareportnetreportnet3_debug_geometry"><a class="header" href="#eeareportnetreportnet3_debug_geometry"><code>EEA.REPORTNET.REPORTNET3_DEBUG_GEOMETRY</code></a></h3>
+<p><strong>Boolean</strong> (yes/no) - When set to <code>yes</code>, this will cause the writer to output the GEOJSON encoded geometry of each FME Feature to the FME Log File. Note that "Log Deug" also has to be enabled (see above).</p>
+<p>Example:</p>
+<pre><code>EEA.REPORTNET.REPORTNET3_DEBUG_GEOMETRY yes
+</code></pre>
+<h3 id="eeareportnetreportnet3_debug_http_post"><a class="header" href="#eeareportnetreportnet3_debug_http_post"><code>EEA.REPORTNET.REPORTNET3_DEBUG_HTTP_POST</code></a></h3>
+<p><em><em>WARNING</em></em> - <em>This directive will write the entire HTTP-Post Body to files in clear text. When working with sensitive data, that may not be a good idea.</em></p>
+<p><strong>Existing Folder</strong> - When set to an <em>existing</em> folder, this will cause the writer to dump each HTTP Post Body to a file in that folder.</p>
+<p>Example:</p>
+<pre><code>EEA.REPORTNET.REPORTNET3_DEBUG_HTTP_POST C:\temp\rn3debug
+</code></pre>
+<p>The filename(s) holds some information and is composed like this:</p>
+<pre><code>&lt;timestamp&gt;_&lt;duration&gt;_&lt;batch_nbr&gt;_&lt;url&gt;_&lt;param=value[&amp;param=value]*&gt;_&lt;http_status&gt;.json
+</code></pre>
+<p>Example:</p>
+<pre><code>20221201_170215_3.85_1_https__test-api.reportnet.europa.eu_dataset_v1_8974_etlImport_dataflowId=1039_200.json
+</code></pre>
+<p>Characters that are not allowed in a filename (<code>'\/:*?"&lt;&gt;'</code>) will be replaced by underscore (<code>'_'</code>) or empty string (<code>''</code>).</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="version-info"><a class="header" href="#version-info">Version Info</a></h1>
 <h2 id="packageyaml"><a class="header" href="#packageyaml">package.yaml</a></h2>
 <pre><code class="language-yaml">fpkg_version: 1
@@ -370,7 +437,7 @@ uid: reportnet
 publisher_uid: eea
 name: Reportnet 3
 description: Access to European Environment Agency environmental and climate reporting data.
-version: 1.0.1
+version: 1.1.0
 minimum_fme_build: 21222
 author:
   name: EEA
@@ -378,7 +445,7 @@ author:
 package_content:
   transformers:
     - name: Reportnet3AttachmentDownloader
-      version: 2
+      version: 3
   formats:
       - name: reportnet3
   python_packages:
@@ -388,8 +455,31 @@ package_content:
       - name: Reportnet 3.xml
 </code></pre>
 <h2 id="commit"><a class="header" href="#commit">Commit</a></h2>
-<p><a href="https://github.com/eea/eea.reportnet3.api.fme/tree/085487f472bbea5e6a7d94dd30f083ffa910bdb2">eea.reportnet3.api.fme@085487f472bbea5e6a7d94dd30f083ffa910bdb2</a></p>
+<p><a href="https://github.com/eea/eea.reportnet3.api.fme/tree/1edec830d992e8bb386887b6a00528da555d0740">eea.reportnet3.api.fme@1edec830d992e8bb386887b6a00528da555d0740</a></p>
 <h1 id="reportnet-3-changes"><a class="header" href="#reportnet-3-changes">Reportnet 3 changes</a></h1>
+<h2 id="v110"><a class="header" href="#v110">v1.1.0</a></h2>
+<ul>
+<li>Two new format attributes were added:
+<ul>
+<li><code>reportnet_id_table_schema</code> - Id of the table schema</li>
+<li><code>reportnet_id_record</code> - Id of the record</li>
+</ul>
+</li>
+</ul>
+<h2 id="v103"><a class="header" href="#v103">v1.0.3</a></h2>
+<ul>
+<li>Verbose debugging can be controlled by using directives <code>EEA.REPORTNET.REPORTNET3_DEBUG_GEOMETRY</code> and <code>EEA.REPORTNET.REPORTNET3_DEBUG_HTTP_POST</code>. Example Workspace Header:</li>
+</ul>
+<pre><code>EEA.REPORTNET.REPORTNET3_DEBUG_GEOMETRY yes
+EEA.REPORTNET.REPORTNET3_DEBUG_HTTP_POST C:\temp\my_rn3_http_posts
+#! START_WB_HEADER
+...
+</code></pre>
+<h2 id="v102"><a class="header" href="#v102">v1.0.2</a></h2>
+<ul>
+<li>"Bulk Size" parameter that controls how many FME Features is now a writer parameter instead of a feature type parameter</li>
+<li>Writer parameter "Connection Timeout" was added</li>
+</ul>
 <h2 id="v101"><a class="header" href="#v101">v1.0.1</a></h2>
 <p>README updated</p>
 <h2 id="v100"><a class="header" href="#v100">v1.0.0</a></h2>
@@ -397,7 +487,7 @@ package_content:
 <p>Errors when parsing geometry should now be more detailed</p>
 <h2 id="v027"><a class="header" href="#v027">v0.2.7</a></h2>
 <p>The setting for Dataflow ID has now moved into the connection parameters.</p>
-<p>Because of this, the named connection has got a &quot;version bump&quot;, i.e. named connections created with earlier versions of the reportnet3 package will not work with this version of the reader/writer/transformer.</p>
+<p>Because of this, the named connection has got a "version bump", i.e. named connections created with earlier versions of the reportnet3 package will not work with this version of the reader/writer/transformer.</p>
 <p>Workspaces created with earlier versions of the reportnet3 package should continue to work.</p>
 <h2 id="v026"><a class="header" href="#v026">v0.2.6</a></h2>
 <p>Let Readers inherit name from the selected webconnection</p>
@@ -427,26 +517,27 @@ package_content:
 
 
 
-        <script type="text/javascript">
+        <script>
             window.playground_copyable = true;
         </script>
 
 
-        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
 
-        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
-        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
 
         <!-- Custom JS scripts -->
 
-        <script type="text/javascript">
+        <script>
         window.addEventListener('load', function() {
             window.setTimeout(window.print, 100);
         });
         </script>
 
+    </div>
     </body>
 </html>
