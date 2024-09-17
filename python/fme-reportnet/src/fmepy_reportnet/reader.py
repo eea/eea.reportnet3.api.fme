@@ -23,7 +23,6 @@ REPORTNET3READER_COUNTER = 0
 DO_PROFILE = False
 ATTACHMENT_FIELD_SEP = ':'
 
-COUNTRY_CODES = {'AL', 'AT', 'BE', 'BA', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'EL', 'HU', 'IS', 'IE', 'IT', 'XK', 'LV', 'LI', 'LT', 'LU', 'MT', 'ME', 'NL', 'MK', 'NO', 'PL', 'PT', 'RO', 'RS', 'SK', 'SI', 'ES', 'SE', 'CH', 'TR', 'UK'}
 
 ReportnetIdentifier = namedtuple('ReportnetIdentifier', ['name', 'id'])
 
@@ -82,10 +81,10 @@ def parse_param(k,s):
         supplied_codes = {*s.split()}
         if not len(supplied_codes):
             return None
-        valid_codes = {c for c in supplied_codes if c in COUNTRY_CODES}
+        valid_codes = {c for c in supplied_codes if c in reportnet_api.REPORTING_COUNTRIES}
         non_valid = supplied_codes - valid_codes
         if len(non_valid):
-            raise FMEException(f'The supplied data provider code(s) {non_valid} could be validated')
+            raise FMEException(f'The supplied data provider code(s) {non_valid} could not be validated')
         return ','.join(valid_codes)
     if type(s) in (list, tuple):
         # This was added as a workaround for a strange case where we retrieve duplicated key-value-pairs in open parameters for reportnet_api_version

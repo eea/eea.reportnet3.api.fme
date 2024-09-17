@@ -13,6 +13,26 @@ DEFAULT_TIMEOUT = 60
 TO_VALID_FILENAME = {92: '', 47: '_', 58: '', 42: '', 63: '_', 34: '', 60: '', 62: ''}
 #                     \       /        :       *       ?        "       <       >
 
+REPORTING_COUNTRIES = {
+  'AL': 'Albania', 'AT': 'Austria'
+, 'BA': 'Bosnia and Herzegovina', 'BE': 'Belgium', 'BG': 'Bulgaria'
+, 'CH': 'Switzerland', 'CY': 'Cyprus', 'CZ': 'Czech Republic'
+, 'DE': 'Germany', 'DK': 'Denmark'
+, 'EE': 'Estonia', 'EL': 'Greece', 'ES': 'Spain'
+, 'FI': 'Finland', 'FR': 'France'
+, 'GE': 'Georgia', 'GI': 'Gibraltar'
+, 'HR': 'Croatia', 'HU': 'Hungary'
+, 'IE': 'Ireland', 'IS': 'Iceland', 'IT': 'Italy'
+, 'LI': 'Liechtenstein', 'LT': 'Lithuania', 'LU': 'Luxembourg', 'LV': 'Latvia'
+, 'MD': 'Moldova', 'ME': 'Montenegro', 'MK': 'North Macedonia', 'MT': 'Malta'
+, 'NL': 'Netherlands', 'NO': 'Norway'
+, 'PL': 'Poland', 'PT': 'Portugal'
+, 'RO': 'Romania', 'RS': 'Serbia'
+, 'SE': 'Sweden', 'SI': 'Slovenia', 'SK': 'Slovakia'
+, 'TR': 'Turkey'
+, 'UA': 'Ukraine', 'UK': 'United Kingdom'
+, 'XK': 'Kosovo'
+}
 
 def create_client(version,*args,**kwargs):
     '''Initiates a client for communication with the API endpoint'''

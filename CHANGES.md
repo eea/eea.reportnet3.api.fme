@@ -1,5 +1,8 @@
 # Reportnet 3 changes
 
+## v1.1.1
+* Four new data providers were added: Georgia (GE), Gibraltar (GI), Moldova (MD) and Ukraine (UA).
+
 ## v1.1.0
 * Two new format attributes were added:
    * `reportnet_id_table_schema` - Id of the table schema
