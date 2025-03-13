@@ -599,7 +599,29 @@ class Reportnet3Reader(FMEReader):
 
         # fetch value using getattr (falling back to '0') because it was added in version 1
         credentials_version = getattr(credentials, 'VERSION', '0')
-
+        # same here, max_retries and backoff_factor is introduced in version 3
+        retry_group = getattr(credentials, 'RETRY_GROUP', 'NO')
+        max_retries = getattr(credentials, 'MAX_RETRIES', '0')
+        backoff_factor = getattr(credentials, 'BACKOFF_FACTOR', '0')
+        retry_http_codes = getattr(credentials, 'RETRY_HTTP_CODES', '')
+        # Need to check variable since default value will be "<Unused>". Named connection passes unreliable null values.
+        if (retry_group == 'NO'):
+            max_retries = 0
+            backoff_factor = 0
+            retry_http_codes = []
+        else:
+            try:
+                max_retries = int(max_retries)
+            except ValueError:
+                max_retries = 0
+            try:
+                backoff_factor = float(backoff_factor)
+            except ValueError:
+                backoff_factor = 0
+            try:
+                retry_http_codes = list(map(int, retry_http_codes.split()))
+            except ValueError:
+                retry_http_codes = []
         if self._params.reportnet_api_version != credentials_version:
             raise FMEException('This Workspace/MappingFile was created using version {} of the Repornet3 api but the supplied connection is of version {}.'.format(self._params.reportnet_api_version, credentials_version))
         
@@ -615,6 +637,9 @@ class Reportnet3Reader(FMEReader):
             , base_url=credentials.API_URL
             , provider_id=credentials.PROVIDER_ID
             , timeout=self._params.connection_timeout
+            , max_retries=max_retries
+            , backoff_factor=backoff_factor
+            , retry_http_codes=retry_http_codes
             , paging=paging
             , log_name=f'{self.__class__.__module__}.{self.__class__.__qualname__}'
         )

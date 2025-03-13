@@ -17,6 +17,15 @@ class _RN3CredV2Mixin:
     VERSION: str = '2'
     DATAFLOW_ID: str = None
 @dataclass
+class _RN3CredV3Mixin:
+    VERSION: str = '2'
+    DATAFLOW_ID: str = None
+    MAX_RETRIES: int = 0
+    BACKOFF_FACTOR: int = 0
+    RETRY_HTTP_CODES: str = ''
+    RETRY_GROUP: str = ''
+
+@dataclass
 class Reportnet3CredentialsV0(Reportnet3Credentials,_RN3CredV0Mixin):
     pass
 @dataclass
@@ -25,10 +34,14 @@ class Reportnet3CredentialsV1(Reportnet3Credentials,_RN3CredV1Mixin,_RN3CredV0Mi
 @dataclass
 class Reportnet3CredentialsV2(Reportnet3Credentials,_RN3CredV2Mixin,_RN3CredV0Mixin):
     pass
+@dataclass
+class Reportnet3CredentialsV3(Reportnet3Credentials,_RN3CredV3Mixin,_RN3CredV0Mixin):
+    pass
 _RN3CRED_VERSIONS = {
       '0': Reportnet3CredentialsV0
     , '1': Reportnet3CredentialsV1
     , '2': Reportnet3CredentialsV2
+    , '3': Reportnet3CredentialsV3
 }
         
 
@@ -46,6 +59,7 @@ def resolve_named_connection(name: str) -> Reportnet3Credentials:
                 https://test-api.reportnet.europa.eu?API_KEY=502982a2-95a5-43ae-bf3b-d16356042c86
                 https://test-api.reportnet.europa.eu?VERSION=1&API_KEY=502982a2-95a5-43ae-bf3b-d16356042c86&PROVIDER_ID=5
                 https://test-api.reportnet.europa.eu?VERSION=2&API_KEY=502982a2-95a5-43ae-bf3b-d16356042c86&DATAFLOW_ID=861&PROVIDER_ID=10
+                https://test-api.reportnet.europa.eu?VERSION=2&API_KEY=502982a2-95a5-43ae-bf3b-d16356042c86&DATAFLOW_ID=861&PROVIDER_ID=10&MAX_RETRIES=3&backoff_factor=10000
     """
     from fmeobjects import FMEException
     from fmewebservices import FMENamedConnectionManager

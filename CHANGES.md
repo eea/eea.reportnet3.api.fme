@@ -1,5 +1,8 @@
 # Reportnet 3 changes
 
+## v1.2.0
+* Web Connection is updated to allow configuration of HTTP retry attempts.
+
 ## v1.1.1
 * Four new data providers were added: Georgia (GE), Gibraltar (GI), Moldova (MD) and Ukraine (UA).
 

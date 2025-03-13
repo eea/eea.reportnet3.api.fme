@@ -44,11 +44,39 @@ def create_client(version,*args,**kwargs):
         return Reportnet3Client_v0_1(*args,**kwargs,url_version_tag='/v1')
     raise Exception(f'Invalid reportnet api client version: `{version}`')
 
+# Can override functions here if we want to change behavoiur of backoff-time.
+class CustomRetry(requests.packages.urllib3.util.Retry):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def increment(self, *args, **kwargs):
+        # Print a message indicating the retry
+        print(f"Retrying... Attempts left: {self.total}")
+        # Call the original increment method
+        return super().increment(*args, **kwargs)
+
 
 class Reportnet3Client_v0_1(object):
-    def __init__(self, api_key, base_url='https://rn3api.eionet.europa.eu', provider_id=None, timeout=10, paging=None,log_name=None,url_version_tag='', debug_http_post_folder=None):
+    def __init__(self, api_key, base_url='https://rn3api.eionet.europa.eu', provider_id=None, timeout=10, max_retries=0, retry_http_codes=[], backoff_factor=0, paging=None,log_name=None,url_version_tag='', debug_http_post_folder=None):
 
         self.session = requests.Session()
+        self.connectionErrors = 0
+        # Timeout related errors not handled the same ass erroers from http codes
+        if 9999 in retry_http_codes:
+            self.connectionErrors = max_retries
+        if max_retries:
+            retry_strategy  = CustomRetry(
+                connect=self.connectionErrors,
+                read=self.connectionErrors,
+                backoff_factor=backoff_factor,  # A delay factor for retries
+                total=max_retries,  # Total number of retries
+                status_forcelist=retry_http_codes  # HTTP status codes to retry on
+            )
+            # Mount the adapter with retries
+            self.retryAdapter = requests.adapters.HTTPAdapter(max_retries=retry_strategy )
+            self.session.mount('http://', self.retryAdapter)
+            self.session.mount('https://', self.retryAdapter)
+
         self.session.headers['Authorization'] = f'ApiKey {api_key}'
         self.api_key = api_key
         self.base_url = base_url
@@ -56,6 +84,9 @@ class Reportnet3Client_v0_1(object):
             self.session.params = {'providerId': provider_id}
         self.provider_id = provider_id
         self.timeout = timeout
+        self.max_retries = max_retries
+        self.backoff_factor = backoff_factor
+        self.retry_http_codes = retry_http_codes
         self.paging = paging
         self.logger = logging.getLogger(log_name or f'{self.__class__.__module__}.{self.__class__.__qualname__}')
         self.logger.debug('__init__ %s.%s %s', self.__class__.__module__, self.__class__.__qualname__, __file__)
@@ -296,6 +327,9 @@ class Reportnet3Client_v0_1(object):
             if not hasattr(self.thread_local, 'session'):
                 # creating a private session for this thread
                 self.thread_local.session = requests.Session()
+                if self.max_retries:         
+                    self.thread_local.session.mount('http://', self.retryAdapter)
+                    self.thread_local.session.mount('https://', self.retryAdapter)
                 self.thread_local.session.headers['Authorization'] = f'ApiKey {self.api_key}'
             if not hasattr(self.thread_local, 'empty_page_at'):
                 # We keep track of if empty page is encountered in each thread so that we can abort early in case total_records is misleading
