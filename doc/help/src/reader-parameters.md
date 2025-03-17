@@ -6,11 +6,12 @@ The Reportnet 3 Reader uses a Reportnet 3 Web Connection.
 The connection should be configured with an API-key, a Dataflow ID and optionally Provider ID from the e-Reporting platform. 
 
 The web connection also allows to configuration of Retry Failed Requests behaviour:
-| Attribute Name            |  Description                                                                         |
-| ------------------------- | ------------------------------------------------------------------------------- |
-| Error Types to Retry             | This parameter allows users to select the types of errors which should lead to a retry attempt. The available options include connection errors such as a network timeout or dns failure, or various HTTP error codes in the 4xx-5xx range. |
-| Maximum Retry Attempts (0-10)      | This parameter specifies the maximum number of retry attempts that will be made for a single feature, before that feature is output through the <Rejected> port of the transformer. |
-| Backoff Factor     | This parameter specifies the amount of time that the transformer will wait before retrying a failed request. The timeout for each incremental retry will be calculated according to: `{backoff factor} * (2 ** ({number of previous retries}))` |
+
+| Attribute Name                |  Description                 |
+| ----------------------------- | ---------------------------- |
+| Error Types to Retry          | This parameter allows users to select the types of errors which should lead to a retry attempt. The available options include connection errors such as a network timeout or dns failure, or various HTTP error codes in the 4xx-5xx range. |
+| Maximum Retry Attempts (0-10) | This parameter specifies the maximum number of retry attempts that will be made for a single feature, before that feature is output through the <Rejected> port of the transformer. |
+| Backoff Factor                | This parameter specifies the amount of time that the transformer will wait before retrying a failed request. The timeout for each incremental retry will be calculated according to: `{backoff factor} * (2 ** ({number of previous retries}))` |
 
 
 ### Dataset
