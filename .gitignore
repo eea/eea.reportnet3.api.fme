@@ -5,3 +5,5 @@ doc/
 help/ 
 python/ 
 transformers/ 
+.commit_hash
+mklinks.bat
