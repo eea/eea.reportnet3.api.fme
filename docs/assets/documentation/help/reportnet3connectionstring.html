@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Dynamic Connection String - eea.reportnet [1.2.0]</title>
+        <title>Dynamic Connection String - eea.reportnet [1.2.1]</title>
         <!-- Custom HTML head -->
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
@@ -103,7 +103,7 @@
                         </button>
                     </div>
 
-                    <h1 class="menu-title">eea.reportnet [1.2.0]</h1>
+                    <h1 class="menu-title">eea.reportnet [1.2.1]</h1>
 
                     <div class="right-buttons">
                         <a href="print.html" title="Print this book" aria-label="Print this book">
@@ -142,10 +142,15 @@
 </ol>
 <p><code>&lt;api_url&gt;?API_KEY=&lt;token&gt;[&amp;VERSION=1][&amp;PROVIDER_ID=&lt;provider_id&gt;]</code></p>
 <p><code>&lt;api_url&gt;?API_KEY=&lt;token&gt;&amp;VERSION=2&amp;DATAFLOW_ID=&lt;dataflow_id&gt;[&amp;PROVIDER_ID=&lt;provider_id&gt;]</code></p>
+<p><code>&lt;api_url&gt;?VERSION=3&amp;API_KEY=&lt;token&gt;&amp;DATAFLOW_ID=&lt;dataflow_id&gt;[&amp;PROVIDER_ID=&lt;provider_id&gt;][&amp;MAX_RETRIES=&lt;max_retries&gt;][&amp;BACKOFF_FACTOR=&lt;backoff_factor&gt;][&amp;RETRY_HTTP_CODES=&lt;retry_http_codes&gt;]</code></p>
 <p>Examples:</p>
 <pre><code>https://test-api.reportnet.europa.eu?API_KEY=502982a2-95a5-43ae-bf3b-d16356042c86
+
 https://test-api.reportnet.europa.eu?VERSION=1&amp;API_KEY=502982a2-95a5-43ae-bf3b-d16356042c86&amp;PROVIDER_ID=5
+
 https://test-api.reportnet.europa.eu?VERSION=2&amp;API_KEY=502982a2-95a5-43ae-bf3b-d16356042c86&amp;DATAFLOW_ID=861&amp;PROVIDER_ID=10
+
+https://test-api.reportnet.europa.eu?VERSION=3&amp;API_KEY=502982a2-95a5-43ae-bf3b-d16356042c86&amp;DATAFLOW_ID=861&amp;PROVIDER_ID=10&amp;MAX_RETRIES=3&amp;BACKOFF_FACTOR=10&amp;RETRY_HTTP_CODES=401,403
 </code></pre>
 <p>Please note that in version 2, <code>DATAFLOW_ID</code> was added as a mandatory url-query-parameter.</p>
 <p>This logic is applied both on the reader, writer and the Reportnet3AttachmentDownloader.</p>

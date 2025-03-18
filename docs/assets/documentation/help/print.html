@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>eea.reportnet [1.2.0]</title>
+        <title>eea.reportnet [1.2.1]</title>
         <meta name="robots" content="noindex" />
         <!-- Custom HTML head -->
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
@@ -104,7 +104,7 @@
                         </button>
                     </div>
 
-                    <h1 class="menu-title">eea.reportnet [1.2.0]</h1>
+                    <h1 class="menu-title">eea.reportnet [1.2.1]</h1>
 
                     <div class="right-buttons">
                         <a href="print.html" title="Print this book" aria-label="Print this book">
@@ -198,12 +198,13 @@
 <h3 id="reportnet-3-connection"><a class="header" href="#reportnet-3-connection">Reportnet 3 Connection</a></h3>
 <p>The Reportnet 3 Reader uses a Reportnet 3 Web Connection. </p>
 <p>The connection should be configured with an API-key, a Dataflow ID and optionally Provider ID from the e-Reporting platform. </p>
-<p>The web connection also allows to configure Retry Failed Requests behaviour:
-| Attribute Name            | Notes     | Descripyion                                                                         |
-| ------------------------- | --------- | -------------------------------------------------------------------------------- |
-| Error Types to Retry             | This parameter allows users to select the types of errors which should lead to a retry attempt. The available options include connection errors such as a network timeout or dns failure, or various HTTP error codes in the 4xx-5xx range. |
-| Maximum Retry Attempts (0-10)      | This parameter specifies the maximum number of retry attempts that will be made for a single feature, before that feature is output through the <Rejected> port of the transformer. |
-| Backoff Factor     | This parameter specifies the amount of time that the transformer will wait before retrying a failed request. The timeout for each retry will be calculated according to: <code>{backoff factor} * (2 ** ({number of previous retries}))</code> |</p>
+<p>The web connection also allows to configuration of Retry Failed Requests behaviour:</p>
+<div class="table-wrapper"><table><thead><tr><th>Attribute Name</th><th>Description</th></tr></thead><tbody>
+<tr><td>Error Types to Retry</td><td>This parameter allows users to select the types of errors which should lead to a retry attempt. The available options include connection errors such as a network timeout or dns failure, or various HTTP error codes in the 4xx-5xx range.</td></tr>
+<tr><td>Maximum Retry Attempts (0-10)</td><td>This parameter specifies the maximum number of retry attempts that will be made for a single feature, before that feature is output through the <Rejected> port of the transformer.</td></tr>
+<tr><td>Backoff Factor</td><td>This parameter specifies the amount of time that the transformer will wait before retrying a failed request. The timeout (t in seconds) for each incremental retry will be calculated according to: <code>t = {backoff factor} * (2 ** ({number of previous retries}))</code></td></tr>
+</tbody></table>
+</div>
 <h3 id="dataset"><a class="header" href="#dataset">Dataset</a></h3>
 <p>The Reportnet 3 <em>Dataset</em></p>
 <p>When selecting the Reportnet Dataset using the browse-button, the value will be encoded for readability, e.g. &quot;My Dataset (42)&quot;, where 42 corresponds to the dataset id.</p>
@@ -362,10 +363,15 @@
 </ol>
 <p><code>&lt;api_url&gt;?API_KEY=&lt;token&gt;[&amp;VERSION=1][&amp;PROVIDER_ID=&lt;provider_id&gt;]</code></p>
 <p><code>&lt;api_url&gt;?API_KEY=&lt;token&gt;&amp;VERSION=2&amp;DATAFLOW_ID=&lt;dataflow_id&gt;[&amp;PROVIDER_ID=&lt;provider_id&gt;]</code></p>
+<p><code>&lt;api_url&gt;?VERSION=3&amp;API_KEY=&lt;token&gt;&amp;DATAFLOW_ID=&lt;dataflow_id&gt;[&amp;PROVIDER_ID=&lt;provider_id&gt;][&amp;MAX_RETRIES=&lt;max_retries&gt;][&amp;BACKOFF_FACTOR=&lt;backoff_factor&gt;][&amp;RETRY_HTTP_CODES=&lt;retry_http_codes&gt;]</code></p>
 <p>Examples:</p>
 <pre><code>https://test-api.reportnet.europa.eu?API_KEY=502982a2-95a5-43ae-bf3b-d16356042c86
+
 https://test-api.reportnet.europa.eu?VERSION=1&amp;API_KEY=502982a2-95a5-43ae-bf3b-d16356042c86&amp;PROVIDER_ID=5
+
 https://test-api.reportnet.europa.eu?VERSION=2&amp;API_KEY=502982a2-95a5-43ae-bf3b-d16356042c86&amp;DATAFLOW_ID=861&amp;PROVIDER_ID=10
+
+https://test-api.reportnet.europa.eu?VERSION=3&amp;API_KEY=502982a2-95a5-43ae-bf3b-d16356042c86&amp;DATAFLOW_ID=861&amp;PROVIDER_ID=10&amp;MAX_RETRIES=3&amp;BACKOFF_FACTOR=10&amp;RETRY_HTTP_CODES=401,403
 </code></pre>
 <p>Please note that in version 2, <code>DATAFLOW_ID</code> was added as a mandatory url-query-parameter.</p>
 <p>This logic is applied both on the reader, writer and the Reportnet3AttachmentDownloader.</p>
@@ -404,7 +410,7 @@ uid: reportnet
 publisher_uid: eea
 name: Reportnet 3
 description: Access to European Environment Agency environmental and climate reporting data.
-version: 1.2.0
+version: 1.2.1
 minimum_fme_build: 22802
 author:
   name: EEA
@@ -422,7 +428,7 @@ package_content:
       - name: Reportnet 3.xml
 </code></pre>
 <h2 id="commit"><a class="header" href="#commit">Commit</a></h2>
-<p><a href="https://github.com/eea/eea.reportnet3.api.fme/tree/cde8736d3845dd870d256d89a412e36e88e58d07">eea.reportnet3.api.fme@cde8736d3845dd870d256d89a412e36e88e58d07</a></p>
+<p><a href="https://github.com/eea/eea.reportnet3.api.fme/tree/e19df6815720f3a941a3422d37f5798c1804e89b">eea.reportnet3.api.fme@e19df6815720f3a941a3422d37f5798c1804e89b</a></p>
 <h1 id="reportnet-3-changes"><a class="header" href="#reportnet-3-changes">Reportnet 3 changes</a></h1>
 <h2 id="v120"><a class="header" href="#v120">v1.2.0</a></h2>
 <ul>
