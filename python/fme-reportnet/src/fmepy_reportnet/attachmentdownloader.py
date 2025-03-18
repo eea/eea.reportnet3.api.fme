@@ -98,9 +98,8 @@ class AttachmentDownloader(object):
         credentials = rn3_fme.resolve_named_connection(nc_name)
         # fetch value using getattr (falling back to '0') because it was added in version 1
         credentials_version = getattr(credentials, 'VERSION', '0')
-        if self.api_version != credentials_version:
-            if not (self._params.reportnet_api_version == '2' and credentials_version == '3'):
-                raise fmeobjects.FMEException('This Transformer uses version {} of the Repornet3 api but the supplied connection is of version {}.'.format(self.api_version, credentials_version))
+        if (self.api_version, credentials_version) not in rn3_fme.VERSION_COMPATIBILITY_RN3API_WEBSVC:
+            raise fmeobjects.FMEException('This Transformer uses version {} of the Repornet3 api but the supplied connection is of version {}.'.format(self.api_version, credentials_version))
 
         if self.client:
             self.client.close()

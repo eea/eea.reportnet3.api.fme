@@ -631,12 +631,9 @@ class Reportnet3Reader(FMEReader):
                     raise ValueError("HTTP_ERROR_CODES list is either mixed or uses a different separator than space (web connection) or comma (connection string).")
             except ValueError:
                 retry_http_codes = []
-        if self._params.reportnet_api_version != credentials_version:
-            # in credentials v3 we do allow requests to api v2. This check should probably be rebuilt.
-            print(self._params.reportnet_api_version)
-            print(credentials_version)
-            if not (self._params.reportnet_api_version == '2' and credentials_version == '3'):
-                raise FMEException('This Workspace/MappingFile was created using version {} of the Repornet3 api but the supplied connection is of version {}.'.format(self._params.reportnet_api_version, credentials_version))
+        
+        if (self._params.reportnet_api_version, credentials_version) not in rn3_fme.VERSION_COMPATIBILITY_RN3API_WEBSVC:
+            raise FMEException('This Workspace/MappingFile was created using version {} of the Repornet3 api but the supplied connection is of version {}.'.format(self._params.reportnet_api_version, credentials_version))
         
         dataflow_id_in_credentials = getattr(credentials, 'DATAFLOW_ID', None)
         if dataflow_id_in_credentials is not None:

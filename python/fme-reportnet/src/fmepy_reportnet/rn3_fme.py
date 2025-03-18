@@ -1,5 +1,15 @@
 """Generic helpers for FME specific operations"""
 
+VERSION_COMPATIBILITY_RN3API_WEBSVC = [
+    # We don't want to run a new workspace using an old named connection
+    # rn3-api, web-service
+     ('1', '1')
+    ,('1', '2')
+    ,('2', '2')
+    ,('1', '3')
+    ,('2', '3')
+]
+
 from dataclasses import dataclass
 from abc import ABC
 class Reportnet3Credentials(ABC):
