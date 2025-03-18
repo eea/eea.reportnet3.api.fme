@@ -231,7 +231,8 @@ class Reportnet3Writer(FMEWriter):
         credentials_version = getattr(credentials, 'VERSION', '0')
 
         if self._params.reportnet_api_version != credentials_version:
-            raise FMEException('This Workspace/MappingFile was created using version {} of the Repornet3 api but the supplied connection is of version {}.'.format(self._params.api_version, credentials_version))
+            if not (self._params.reportnet_api_version == '2' and credentials_version == '3'):
+                raise FMEException('This Workspace/MappingFile was created using version {} of the Repornet3 api but the supplied connection is of version {}.'.format(self._params.api_version, credentials_version))
         self._client = reportnet_api.create_client(
                 self._params.reportnet_api_version
             , credentials.API_KEY

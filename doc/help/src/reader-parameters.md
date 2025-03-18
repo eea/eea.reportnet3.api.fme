@@ -11,7 +11,7 @@ The web connection also allows to configuration of Retry Failed Requests behavio
 | ----------------------------- | ---------------------------- |
 | Error Types to Retry          | This parameter allows users to select the types of errors which should lead to a retry attempt. The available options include connection errors such as a network timeout or dns failure, or various HTTP error codes in the 4xx-5xx range. |
 | Maximum Retry Attempts (0-10) | This parameter specifies the maximum number of retry attempts that will be made for a single feature, before that feature is output through the <Rejected> port of the transformer. |
-| Backoff Factor                | This parameter specifies the amount of time that the transformer will wait before retrying a failed request. The timeout for each incremental retry will be calculated according to: `{backoff factor} * (2 ** ({number of previous retries}))` |
+| Backoff Factor                | This parameter specifies the amount of time that the transformer will wait before retrying a failed request. The timeout (t in seconds) for each incremental retry will be calculated according to: `t = {backoff factor} * (2 ** ({number of previous retries}))` |
 
 
 ### Dataset

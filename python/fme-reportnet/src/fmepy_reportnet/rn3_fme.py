@@ -54,12 +54,13 @@ def resolve_named_connection(name: str) -> Reportnet3Credentials:
             
             * version 0-1: <api_url>?API_KEY=<token>[&PROVIDER_ID=<provider_id>][&VERSION=<version>]
             * version 2: <api_url>?VERSION=2&API_KEY=<token>&DATAFLOW_ID=<dataflow_id>[&PROVIDER_ID=<provider_id>]
+            * version 3: <api_url>?VERSION=3&API_KEY=<token>&DATAFLOW_ID=<dataflow_id>[&PROVIDER_ID=<provider_id>][&MAX_RETRIES=<max_retries>][&BACKOFF_FACTOR=<backoff_factor>][&RETRY_HTTP_CODES=<retry_http_codes>]
 
             Example:
                 https://test-api.reportnet.europa.eu?API_KEY=502982a2-95a5-43ae-bf3b-d16356042c86
                 https://test-api.reportnet.europa.eu?VERSION=1&API_KEY=502982a2-95a5-43ae-bf3b-d16356042c86&PROVIDER_ID=5
                 https://test-api.reportnet.europa.eu?VERSION=2&API_KEY=502982a2-95a5-43ae-bf3b-d16356042c86&DATAFLOW_ID=861&PROVIDER_ID=10
-                https://test-api.reportnet.europa.eu?VERSION=2&API_KEY=502982a2-95a5-43ae-bf3b-d16356042c86&DATAFLOW_ID=861&PROVIDER_ID=10&MAX_RETRIES=3&backoff_factor=10000
+                https://test-api.reportnet.europa.eu?VERSION=3&API_KEY=502982a2-95a5-43ae-bf3b-d16356042c86&DATAFLOW_ID=861&PROVIDER_ID=10&MAX_RETRIES=3&BACKOFF_FACTOR=10&BACKOFF_FACTOR&RETRY_HTTP_CODES=401,403
     """
     from fmeobjects import FMEException
     from fmewebservices import FMENamedConnectionManager

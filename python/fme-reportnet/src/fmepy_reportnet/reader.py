@@ -619,11 +619,24 @@ class Reportnet3Reader(FMEReader):
             except ValueError:
                 backoff_factor = 0
             try:
-                retry_http_codes = list(map(int, retry_http_codes.split()))
+                 # Check for space separation
+                if ' ' in retry_http_codes and ',' not in retry_http_codes:
+                    # The string is space-separated.
+                    retry_http_codes = list(map(int, retry_http_codes.split()))
+                elif ',' in retry_http_codes and ' ' not in retry_http_codes:
+                    # The string is comma-separated.
+                    retry_http_codes = list(map(int, retry_http_codes.split(',')))
+                # Mixed or other
+                else:
+                    raise ValueError("HTTP_ERROR_CODES list is either mixed or uses a different separator than space (web connection) or comma (connection string).")
             except ValueError:
                 retry_http_codes = []
         if self._params.reportnet_api_version != credentials_version:
-            raise FMEException('This Workspace/MappingFile was created using version {} of the Repornet3 api but the supplied connection is of version {}.'.format(self._params.reportnet_api_version, credentials_version))
+            # in credentials v3 we do allow requests to api v2. This check should probably be rebuilt.
+            print(self._params.reportnet_api_version)
+            print(credentials_version)
+            if not (self._params.reportnet_api_version == '2' and credentials_version == '3'):
+                raise FMEException('This Workspace/MappingFile was created using version {} of the Repornet3 api but the supplied connection is of version {}.'.format(self._params.reportnet_api_version, credentials_version))
         
         dataflow_id_in_credentials = getattr(credentials, 'DATAFLOW_ID', None)
         if dataflow_id_in_credentials is not None:
