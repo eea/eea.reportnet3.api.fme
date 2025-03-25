@@ -87,8 +87,8 @@ def resolve_named_connection(name: str) -> Reportnet3Credentials:
                 https://test-api.reportnet.europa.eu?API_KEY=502982a2-95a5-43ae-bf3b-d16356042c86
                 https://test-api.reportnet.europa.eu?VERSION=1&API_KEY=502982a2-95a5-43ae-bf3b-d16356042c86&PROVIDER_ID=5
                 https://test-api.reportnet.europa.eu?VERSION=2&API_KEY=502982a2-95a5-43ae-bf3b-d16356042c86&DATAFLOW_ID=861&PROVIDER_ID=10
-                https://test-api.reportnet.europa.eu?VERSION=3&API_KEY=502982a2-95a5-43ae-bf3b-d16356042c86&DATAFLOW_ID=861&PROVIDER_ID=10&MAX_RETRIES=3&BACKOFF_FACTOR=10&BACKOFF_FACTOR&RETRY_HTTP_CODES=401,403
-                https://test-api.reportnet.europa.eu?VERSION=4&API_KEY=502982a2-95a5-43ae-bf3b-d16356042c86&DATAFLOW_ID=861&PROVIDER_ID=10&MAX_RETRIES=3&BACKOFF_FACTOR=10&BACKOFF_FACTOR&RETRY_HTTP_CODES=401,403&PAGING_LOGIC=NEW
+                https://test-api.reportnet.europa.eu?VERSION=3&API_KEY=502982a2-95a5-43ae-bf3b-d16356042c86&DATAFLOW_ID=861&PROVIDER_ID=10&MAX_RETRIES=3&BACKOFF_FACTOR=10&RETRY_HTTP_CODES=401,403
+                https://test-api.reportnet.europa.eu?VERSION=4&API_KEY=502982a2-95a5-43ae-bf3b-d16356042c86&DATAFLOW_ID=861&PROVIDER_ID=10&MAX_RETRIES=3&BACKOFF_FACTOR=10&RETRY_HTTP_CODES=401,403&PAGING_LOGIC=NEW
     """
     from fmeobjects import FMEException
     from fmewebservices import FMENamedConnectionManager
