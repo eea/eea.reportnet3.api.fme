@@ -13,6 +13,15 @@ The web connection also allows to configuration of Retry Failed Requests behavio
 | Maximum Retry Attempts (0-10) | This parameter specifies the maximum number of retry attempts that will be made for a single feature, before that feature is output through the <Rejected> port of the transformer. |
 | Backoff Factor                | This parameter specifies the amount of time that the transformer will wait before retrying a failed request. The timeout (t in seconds) for each incremental retry will be calculated according to: `t = {backoff factor} * (2 ** ({number of previous retries}))` |
 
+Depending on what backend is used to serve a certain dataflow, the reader can now be configured to use either the old paging logic or the new one.
+
+It is very important to choose the correct paging logic because incomplete and duplicated records will be produced if choosing the wrong one.
+
+If your dataflow id marked with "(Big Data)" it means you should use the `NEW` paging logic:
+
+![](./images/big-data-dataflow.png)
+
+![](./images/new-paging-logic.png)
 
 ### Dataset
 The Reportnet 3 *Dataset*
