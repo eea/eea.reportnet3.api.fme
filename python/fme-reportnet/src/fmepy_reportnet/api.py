@@ -70,11 +70,12 @@ class Reportnet3Client_v0_1(object):
             self.connectionErrors = max_retries
         if max_retries:
             retry_strategy  = CustomRetry(
-                connect=self.connectionErrors,
-                read=self.connectionErrors,
-                backoff_factor=backoff_factor,  # A delay factor for retries
-                total=max_retries,  # Total number of retries
-                status_forcelist=retry_http_codes  # HTTP status codes to retry on
+                  connect=self.connectionErrors
+                , read=self.connectionErrors
+                , backoff_factor=backoff_factor      # A delay factor for retries
+                , total=max_retries                  # Total number of retries
+                , status_forcelist=retry_http_codes  # HTTP status codes to retry on
+                                                     # Backoff jitter not present in FME 2022 version of requests, backoff_jitter=3.0
             )
             # Mount the adapter with retries
             self.retryAdapter = requests.adapters.HTTPAdapter(max_retries=retry_strategy )
