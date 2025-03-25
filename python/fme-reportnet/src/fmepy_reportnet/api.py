@@ -8,7 +8,9 @@ import threading
 from datetime import datetime
 import time
 import json
+from json.decoder import JSONDecodeError
 import os.path
+
 DEFAULT_TIMEOUT = 60
 TO_VALID_FILENAME = {92: '', 47: '_', 58: '', 42: '', 63: '_', 34: '', 60: '', 62: ''}
 #                     \       /        :       *       ?        "       <       >
@@ -326,6 +328,10 @@ class Reportnet3Client_v0_1(object):
             params['dataProviderCodes'] = data_provider_codes
         if self.provider_id is not None and len(self.provider_id):
             params['providerId'] = self.provider_id
+            
+        # We need to communicate across threads that an empty page was
+        # encountered
+        empty_page_encountered = threading.Event()
         def get_page(page_nbr):
             if not hasattr(self.thread_local, 'session'):
                 # creating a private session for this thread
@@ -334,28 +340,43 @@ class Reportnet3Client_v0_1(object):
                     self.thread_local.session.mount('http://', self.retryAdapter)
                     self.thread_local.session.mount('https://', self.retryAdapter)
                 self.thread_local.session.headers['Authorization'] = f'ApiKey {self.api_key}'
-            if not hasattr(self.thread_local, 'empty_page_at'):
-                # We keep track of if empty page is encountered in each thread so that we can abort early in case total_records is misleading
-                self.thread_local.empty_page_at = 0
-            if self.thread_local.empty_page_at and page_nbr > self.thread_local.empty_page_at:
+            
+            if empty_page_encountered.is_set():
                 # Normally this should not happen but if the endpoint reports wrong nbr of total records we may end up here.
-                #print(f'thread {threading.get_ident()}, page_nbr {page_nbr} - aborting due to empty page at {self.thread_local.empty_page_at}')
+                self.logger.error('Aborting due to empty page')
                 return 0, page_nbr, []
-            paging_params = dict()
+            page_params = {**params}
             if PAGING_LOGIC_OLD == self.paging_logic:
-                if not page_nbr:
-                    paging_params['limit'] = 0
-                paging_params['offset'] = page_nbr
+                # When using the old paging logic, page 0 (zero) is 
+                # used only to fetch total nbr of records
+                if 0 == page_nbr:
+                    page_params['limit'] = 0
+                page_params['offset'] = page_nbr
             elif PAGING_LOGIC_NEW == self.paging_logic:
-                paging_params['limit'] = page_size
-                paging_params['offset'] = page_nbr * page_size
+                page_params['offset'] = page_nbr * page_size
+            self.logger.debug('Requesting url %s using params %s', url, page_params)
             r = self.thread_local.session.get(
                 url,
-                params={**params, **paging_params},
+                params=page_params,
                 timeout=timeout or self.timeout
             )
             r.raise_for_status()
-            data = r.json()
+            data = dict()
+            try:
+                data = r.json()
+            except JSONDecodeError as decodeError:
+                '''
+                |  Subclass of ValueError with the following additional properties:
+                |
+                |  msg: The unformatted error message
+                |  doc: The JSON document being parsed
+                |  pos: The start index of doc where parsing failed
+                |  lineno: The line corresponding to pos
+                |  colno: The column corresponding to pos 
+                '''
+                self.logger.error('Error while fetching page %s %s. Error message was: `%s`', url, params, decodeError.msg)
+                self.logger.error('json data was: `%s`', decodeError.doc)
+                raise decodeError
             # The response model is different when we retrieve an empty result:
             # Empty:
             #  {'tables': [{'totalRecords': 0, 'records': [], 'tableName': 'BIOREGION'}]}
@@ -370,21 +391,21 @@ class Reportnet3Client_v0_1(object):
                 self.logger.warn('totalRecords %s', total_records)
                 return 0, page_nbr, []
             records = data.get('records', [])
-            if not len(records) and page_nbr > 0:
-                # print(f'thread {threading.get_ident()}, page_nbr {page_nbr} - no records ({records})')
+            if not len(records) and (PAGING_LOGIC_NEW == self.paging_logic or page_nbr > 0):
                 # no records, this could happen if the initial calculation of total nbr pages was wrong
-                self.thread_local.empty_page_at = page_nbr
-                #raise Exception('no records')
+                empty_page_encountered.set()
+                self.logger.warning('page_nbr %s was empty', page_nbr)
                 return 0, page_nbr, []
             self.logger.debug('page_nbr %s, %s records', page_nbr, len(records))
             return total_records,page_nbr,records
-        total_records,_,page_one = get_page(0)
-        records_to_fetch = total_records
+        total_records,_,page_zero = get_page(0)
+        records_left_to_fetch = total_records - len(page_zero)
         if limit is not None:
-            records_to_fetch = min(limit, total_records)
-        last_page_nbr = math.ceil(records_to_fetch / page_size)
-        additional_page_nbrs = range(1, last_page_nbr + 1, 1)
-        self.logger.debug('total_records: %s, fetching %s records in %s pages', total_records, records_to_fetch, len(additional_page_nbrs))
+            records_left_to_fetch = min(limit - len(page_zero), records_left_to_fetch)
+        pages_left_to_fetch = math.ceil(records_left_to_fetch / page_size)
+        additional_page_nbrs = range(1, pages_left_to_fetch + 1, 1)
+        self.logger.debug('page zero contains %s records', len(page_zero))
+        self.logger.debug('total_records: %s, fetching another %s record(s) in %s page(s)', total_records, records_left_to_fetch, len(additional_page_nbrs))
         with concurrent.futures.ThreadPoolExecutor(max_workers=concurrent_http_requests) as executor:
             additional_pages = []
             if ordered:
@@ -399,7 +420,7 @@ class Reportnet3Client_v0_1(object):
                         )
                     )
                 )
-            pages = itertools.chain([(total_records,1,page_one)], additional_pages)
+            pages = itertools.chain([(total_records,0,page_zero)], additional_pages)
             records = ((page_nbr, rec) for _, page_nbr,page in pages for rec in page)
             for i, (_, rec) in enumerate(records):
                 if limit and i >= limit:
