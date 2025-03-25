@@ -48,7 +48,7 @@
       &lt;/nc_gui_field&gt;
       &lt;nc_gui_field&gt;
         &lt;field_name&gt;PAGING_LOGIC&lt;/field_name&gt;
-        &lt;gui_line&gt;GUI CHOICE PAGING_LOGIC OLD%NEW Paging Logic::&lt;/gui_line&gt;
+        &lt;gui_line&gt;GUI CHOICE PAGING_LOGIC OLD%NEW Paging Logic:&lt;/gui_line&gt;
         &lt;gui_line&gt;DEFAULT_VALUE PAGING_LOGIC OLD&lt;/gui_line&gt;
       &lt;/nc_gui_field&gt;
       &lt;nc_gui_field&gt;
