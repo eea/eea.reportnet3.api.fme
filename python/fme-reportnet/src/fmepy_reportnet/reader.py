@@ -626,10 +626,12 @@ class Reportnet3Reader(FMEReader):
                 elif ',' in retry_http_codes and ' ' not in retry_http_codes:
                     # The string is comma-separated.
                     retry_http_codes = list(map(int, retry_http_codes.split(',')))
-                # Mixed or other
+                elif retry_http_codes.isdigit():
+                    retry_http_codes = [int(retry_http_codes)]
                 else:
                     raise ValueError("HTTP_ERROR_CODES list is either mixed or uses a different separator than space (web connection) or comma (connection string).")
-            except ValueError:
+            except ValueError as e:
+                self._warn(str(e))
                 retry_http_codes = []
         
         if (self._params.reportnet_api_version, credentials_version) not in rn3_fme.VERSION_COMPATIBILITY_RN3API_WEBSVC:

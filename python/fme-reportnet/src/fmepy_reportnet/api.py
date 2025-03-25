@@ -462,7 +462,21 @@ class Reportnet3Client_v0_1(object):
             except Exception as e:
                 print(' ', e)
     def __str__(self):
-        return f'{type(self).__name__}(base_url: {self.base_url}, paging: {self.paging})'
+        properties = {s: getattr(self, s, '') for s in [
+              'connectionErrors'
+            , 'api_key'
+            , 'base_url'
+            , 'provider_id'
+            , 'timeout'
+            , 'max_retries'
+            , 'backoff_factor'
+            , 'retry_http_codes'
+            , 'paging'
+            , 'url_version_tag'
+            , 'debug_http_post_folder'
+            , 'etl_import_batches']
+        }
+        return f'{type(self).__name__}({properties})'
 
     # ceil without using math module
     def ceil(self, n):
