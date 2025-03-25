@@ -40,7 +40,7 @@ PARAMETER_PROMPT: Parameters
 PARAMETER_DEFAULT:
 
 PARAMETER_NAME: REPORTNET_CONNECTION
-PARAMETER_TYPE: NAMED_CONNECTION_OR_ATTR_ENCODED \"eea.reportnet.Reportnet 3 v2\"%\"eea.reportnet.Reportnet 3 v3\"
+PARAMETER_TYPE: NAMED_CONNECTION_OR_ATTR_ENCODED \"eea.reportnet.Reportnet 3 v2\"%\"eea.reportnet.Reportnet 3 v3\"%\"eea.reportnet.Reportnet 3 v4\"
 PARAMETER_PROMPT:  Reportnet 3 Connection:
 PARAMETER_DEFAULT:
 

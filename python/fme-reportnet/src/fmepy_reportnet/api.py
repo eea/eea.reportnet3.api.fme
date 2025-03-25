@@ -34,6 +34,8 @@ REPORTING_COUNTRIES = {
 , 'XK': 'Kosovo'
 }
 
+PAGING_LOGIC_OLD = 0
+PAGING_LOGIC_NEW = 1
 def create_client(version,*args,**kwargs):
     '''Initiates a client for communication with the API endpoint'''
     if '0' == version:
@@ -57,7 +59,7 @@ class CustomRetry(requests.packages.urllib3.util.Retry):
 
 
 class Reportnet3Client_v0_1(object):
-    def __init__(self, api_key, base_url='https://rn3api.eionet.europa.eu', provider_id=None, timeout=10, max_retries=0, retry_http_codes=[], backoff_factor=0, paging=None,log_name=None,url_version_tag='', debug_http_post_folder=None):
+    def __init__(self, api_key, base_url='https://rn3api.eionet.europa.eu', provider_id=None, timeout=10, max_retries=0, retry_http_codes=[], backoff_factor=0, paging=None,log_name=None,url_version_tag='', debug_http_post_folder=None, paging_logic=PAGING_LOGIC_OLD):
 
         self.session = requests.Session()
         self.connectionErrors = 0
@@ -94,6 +96,7 @@ class Reportnet3Client_v0_1(object):
         self.thread_local = threading.local()
         self.debug_http_post_folder = debug_http_post_folder
         self.etl_import_batches = 0
+        self.paging_logic = paging_logic
         
             
         """ TODO: Decide if we should take user_info into account
@@ -338,10 +341,17 @@ class Reportnet3Client_v0_1(object):
                 # Normally this should not happen but if the endpoint reports wrong nbr of total records we may end up here.
                 #print(f'thread {threading.get_ident()}, page_nbr {page_nbr} - aborting due to empty page at {self.thread_local.empty_page_at}')
                 return 0, page_nbr, []
-
+            paging_params = dict()
+            if PAGING_LOGIC_OLD == self.paging_logic:
+                if not page_nbr:
+                    paging_params['limit'] = 0
+                paging_params['offset'] = page_nbr
+            elif PAGING_LOGIC_NEW == self.paging_logic:
+                paging_params['limit'] = page_size
+                paging_params['offset'] = page_nbr * page_size
             r = self.thread_local.session.get(
                 url,
-                params={**params, **({ "limit": 0 } if not page_nbr else {}), "offset": page_nbr},
+                params={**params, **paging_params},
                 timeout=timeout or self.timeout
             )
             r.raise_for_status()

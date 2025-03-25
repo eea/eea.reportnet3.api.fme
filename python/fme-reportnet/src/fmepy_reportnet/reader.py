@@ -638,6 +638,12 @@ class Reportnet3Reader(FMEReader):
             raise FMEException('This Workspace/MappingFile was created using version {} of the Repornet3 api but the supplied connection is of version {}.'.format(self._params.reportnet_api_version, credentials_version))
         
         dataflow_id_in_credentials = getattr(credentials, 'DATAFLOW_ID', None)
+        
+        paging_logic = reportnet_api.PAGING_LOGIC_OLD
+        if 'NEW' == getattr(credentials, 'PAGING_LOGIC', 'Not Found'):
+            paging_logic = reportnet_api.PAGING_LOGIC_NEW
+            
+        
         if dataflow_id_in_credentials is not None:
             reportnet_dataflow = ReportnetIdentifier('_', dataflow_id_in_credentials)
             # Params is a tuple and can not be changed but we can create a new one from dict where we override reportnet_dataflow
@@ -654,6 +660,7 @@ class Reportnet3Reader(FMEReader):
             , retry_http_codes=retry_http_codes
             , paging=paging
             , log_name=f'{self.__class__.__module__}.{self.__class__.__qualname__}'
+            , paging_logic=paging_logic
         )
         self._debug(f'Client created: {self._reportnet_client}')
 

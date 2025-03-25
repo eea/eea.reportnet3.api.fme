@@ -28,12 +28,22 @@ class _RN3CredV2Mixin:
     DATAFLOW_ID: str = None
 @dataclass
 class _RN3CredV3Mixin:
-    VERSION: str = '2'
+    VERSION: str = '3'
     DATAFLOW_ID: str = None
     MAX_RETRIES: int = 0
     BACKOFF_FACTOR: int = 0
     RETRY_HTTP_CODES: str = ''
     RETRY_GROUP: str = ''
+@dataclass
+class _RN3CredV4Mixin:
+    VERSION: str = '4'
+    DATAFLOW_ID: str = None
+    MAX_RETRIES: int = 0
+    BACKOFF_FACTOR: int = 0
+    RETRY_HTTP_CODES: str = ''
+    RETRY_GROUP: str = ''
+    RETRY_GROUP: str = ''
+    PAGING_LOGIC: str = 'OLD'
 
 @dataclass
 class Reportnet3CredentialsV0(Reportnet3Credentials,_RN3CredV0Mixin):
@@ -47,11 +57,15 @@ class Reportnet3CredentialsV2(Reportnet3Credentials,_RN3CredV2Mixin,_RN3CredV0Mi
 @dataclass
 class Reportnet3CredentialsV3(Reportnet3Credentials,_RN3CredV3Mixin,_RN3CredV0Mixin):
     pass
+@dataclass
+class Reportnet3CredentialsV4(Reportnet3Credentials,_RN3CredV4Mixin,_RN3CredV0Mixin):
+    pass
 _RN3CRED_VERSIONS = {
       '0': Reportnet3CredentialsV0
     , '1': Reportnet3CredentialsV1
     , '2': Reportnet3CredentialsV2
     , '3': Reportnet3CredentialsV3
+    , '4': Reportnet3CredentialsV4
 }
         
 
@@ -65,12 +79,14 @@ def resolve_named_connection(name: str) -> Reportnet3Credentials:
             * version 0-1: <api_url>?API_KEY=<token>[&PROVIDER_ID=<provider_id>][&VERSION=<version>]
             * version 2: <api_url>?VERSION=2&API_KEY=<token>&DATAFLOW_ID=<dataflow_id>[&PROVIDER_ID=<provider_id>]
             * version 3: <api_url>?VERSION=3&API_KEY=<token>&DATAFLOW_ID=<dataflow_id>[&PROVIDER_ID=<provider_id>][&MAX_RETRIES=<max_retries>][&BACKOFF_FACTOR=<backoff_factor>][&RETRY_HTTP_CODES=<retry_http_codes>]
+            * version 4: <api_url>?VERSION=3&API_KEY=<token>&DATAFLOW_ID=<dataflow_id>[&PROVIDER_ID=<provider_id>][&MAX_RETRIES=<max_retries>][&BACKOFF_FACTOR=<backoff_factor>][&RETRY_HTTP_CODES=<retry_http_codes>][&PAGING_LOGIC=OLD|NEW]
 
             Example:
                 https://test-api.reportnet.europa.eu?API_KEY=502982a2-95a5-43ae-bf3b-d16356042c86
                 https://test-api.reportnet.europa.eu?VERSION=1&API_KEY=502982a2-95a5-43ae-bf3b-d16356042c86&PROVIDER_ID=5
                 https://test-api.reportnet.europa.eu?VERSION=2&API_KEY=502982a2-95a5-43ae-bf3b-d16356042c86&DATAFLOW_ID=861&PROVIDER_ID=10
                 https://test-api.reportnet.europa.eu?VERSION=3&API_KEY=502982a2-95a5-43ae-bf3b-d16356042c86&DATAFLOW_ID=861&PROVIDER_ID=10&MAX_RETRIES=3&BACKOFF_FACTOR=10&BACKOFF_FACTOR&RETRY_HTTP_CODES=401,403
+                https://test-api.reportnet.europa.eu?VERSION=4&API_KEY=502982a2-95a5-43ae-bf3b-d16356042c86&DATAFLOW_ID=861&PROVIDER_ID=10&MAX_RETRIES=3&BACKOFF_FACTOR=10&BACKOFF_FACTOR&RETRY_HTTP_CODES=401,403&PAGING_LOGIC=NEW
     """
     from fmeobjects import FMEException
     from fmewebservices import FMENamedConnectionManager
