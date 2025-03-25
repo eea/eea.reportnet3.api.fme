@@ -1,5 +1,8 @@
 # Reportnet 3 changes
 
+## v1.3.0
+* Paging is now implemented to work with both the old and the new backend.
+
 ## v1.2.0
 * Web Connection is updated to allow configuration of HTTP retry attempts.
 
