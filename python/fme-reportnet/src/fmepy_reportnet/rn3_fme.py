@@ -8,6 +8,8 @@ VERSION_COMPATIBILITY_RN3API_WEBSVC = [
     ,('2', '2')
     ,('1', '3')
     ,('2', '3')
+    ,('1', '4')
+    ,('2', '4')
 ]
 
 from dataclasses import dataclass
