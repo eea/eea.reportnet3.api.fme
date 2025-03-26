@@ -95,7 +95,7 @@ def resolve_named_connection(name: str) -> Reportnet3Credentials:
     nc = FMENamedConnectionManager().getNamedConnection(name)
     if nc:
         import re
-        m = re.match('eea.reportnet.Reportnet 3( v(\d+))?', nc.getWebService().getName())
+        m = re.match(r'eea.reportnet.Reportnet 3( v(\d+))?', nc.getWebService().getName())
         if not m:
             raise FMEException(f'`{name}` is not a valid Reportnet3 Connection')
         version = m.group(2) or '0'
