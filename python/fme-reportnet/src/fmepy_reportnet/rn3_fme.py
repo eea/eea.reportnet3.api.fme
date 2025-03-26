@@ -44,7 +44,6 @@ class _RN3CredV4Mixin:
     BACKOFF_FACTOR: int = 0
     RETRY_HTTP_CODES: str = ''
     RETRY_GROUP: str = ''
-    RETRY_GROUP: str = ''
     PAGING_LOGIC: str = 'OLD'
 
 @dataclass
