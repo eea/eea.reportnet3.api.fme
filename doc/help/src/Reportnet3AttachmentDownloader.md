@@ -1,7 +1,7 @@
 # Reportnet3AttachmentDownloader
 The Reportnet3AttachmentDownloader can be used to download attachments form Reportnet 3.
 
-For other usage then downloading attachments for features that are coming from a Reportnet 3 Reader, see section [Attachment](#attachment-src_attr_single) below for how to compose an attachment-attribute that can be used in this transformer.
+For other usage than downloading attachments for features that are coming from a Reportnet 3 Reader, see section [Attachment](#attachment-src_attr_single) below for how to compose an attachment-attribute that can be used in this transformer.
 
 ## Parameters
 
