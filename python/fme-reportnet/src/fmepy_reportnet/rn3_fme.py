@@ -1,5 +1,7 @@
 """Generic helpers for FME specific operations"""
 
+from fmeobjects import FMEException
+
 VERSION_COMPATIBILITY_RN3API_WEBSVC = [
     # We don't want to run a new workspace using an old named connection
     # rn3-api, web-service
@@ -69,8 +71,30 @@ _RN3CRED_VERSIONS = {
     , '4': Reportnet3CredentialsV4
 }
         
+def params_from_nc(name):
+    from fmewebservices import FMENamedConnectionManager
+    nc = FMENamedConnectionManager().getNamedConnection(name)
+    if nc:
+        import re
+        m = re.match(r'eea.reportnet.Reportnet 3( v(\d+))?', nc.getWebService().getName())
+        if not m:
+            raise FMEException(f'`{name}` is not a valid Reportnet3 Connection')
+        return {**nc.getKeyValues(), 'VERSION': m.group(2)}
+    return None
 
-def resolve_named_connection(name: str) -> Reportnet3Credentials:
+def params_from_url(url):
+    from urllib.parse import urlparse, parse_qsl
+    o = urlparse(url)
+    if not (o.scheme in ['http', 'https'] and o.netloc):
+        raise FMEException(f'Invalid Connection: `{url}`')
+    try:
+        return dict(parse_qsl(o.query)) | {'API_URL': f'{o.scheme}://{o.netloc}/{o.path}'.rstrip('/')}
+    except Exception as e:
+        raise FMEException(f'Could not parse connection string `{url}`. {e}')
+        
+        
+    
+def resolve_named_connection(name_or_url: str) -> Reportnet3Credentials:
     """Resolve a named connection.
 
     Arguments:
@@ -79,40 +103,18 @@ def resolve_named_connection(name: str) -> Reportnet3Credentials:
             
             * version 0-1: <api_url>?API_KEY=<token>[&PROVIDER_ID=<provider_id>][&VERSION=<version>]
             * version 2: <api_url>?VERSION=2&API_KEY=<token>&DATAFLOW_ID=<dataflow_id>[&PROVIDER_ID=<provider_id>]
-            * version 3: <api_url>?VERSION=3&API_KEY=<token>&DATAFLOW_ID=<dataflow_id>[&PROVIDER_ID=<provider_id>][&MAX_RETRIES=<max_retries>][&BACKOFF_FACTOR=<backoff_factor>][&RETRY_HTTP_CODES=<retry_http_codes>]
-            * version 4: <api_url>?VERSION=3&API_KEY=<token>&DATAFLOW_ID=<dataflow_id>[&PROVIDER_ID=<provider_id>][&MAX_RETRIES=<max_retries>][&BACKOFF_FACTOR=<backoff_factor>][&RETRY_HTTP_CODES=<retry_http_codes>][&PAGING_LOGIC=OLD|NEW]
+            * version 3: <api_url>?VERSION=3&API_KEY=<token>&DATAFLOW_ID=<dataflow_id>[&PROVIDER_ID=<provider_id>][&RETRY_GROUP=YES&MAX_RETRIES=<max_retries>][&BACKOFF_FACTOR=<backoff_factor>][&RETRY_HTTP_CODES=<retry_http_codes>]
+            * version 4: <api_url>?VERSION=4&API_KEY=<token>&DATAFLOW_ID=<dataflow_id>[&PROVIDER_ID=<provider_id>][&RETRY_GROUP=YES&MAX_RETRIES=<max_retries>&BACKOFF_FACTOR=<backoff_factor>&RETRY_HTTP_CODES=<retry_http_codes>][&PAGING_LOGIC=OLD|NEW]
 
             Example:
                 https://test-api.reportnet.europa.eu?API_KEY=502982a2-95a5-43ae-bf3b-d16356042c86
                 https://test-api.reportnet.europa.eu?VERSION=1&API_KEY=502982a2-95a5-43ae-bf3b-d16356042c86&PROVIDER_ID=5
                 https://test-api.reportnet.europa.eu?VERSION=2&API_KEY=502982a2-95a5-43ae-bf3b-d16356042c86&DATAFLOW_ID=861&PROVIDER_ID=10
-                https://test-api.reportnet.europa.eu?VERSION=3&API_KEY=502982a2-95a5-43ae-bf3b-d16356042c86&DATAFLOW_ID=861&PROVIDER_ID=10&MAX_RETRIES=3&BACKOFF_FACTOR=10&RETRY_HTTP_CODES=401,403
-                https://test-api.reportnet.europa.eu?VERSION=4&API_KEY=502982a2-95a5-43ae-bf3b-d16356042c86&DATAFLOW_ID=861&PROVIDER_ID=10&MAX_RETRIES=3&BACKOFF_FACTOR=10&RETRY_HTTP_CODES=401,403&PAGING_LOGIC=NEW
+                https://test-api.reportnet.europa.eu?VERSION=3&API_KEY=502982a2-95a5-43ae-bf3b-d16356042c86&DATAFLOW_ID=861&PROVIDER_ID=10&RETRY_GROUP=YES&MAX_RETRIES=3&BACKOFF_FACTOR=10&RETRY_HTTP_CODES=401,403
+                https://test-api.reportnet.europa.eu?VERSION=4&API_KEY=502982a2-95a5-43ae-bf3b-d16356042c86&DATAFLOW_ID=861&PROVIDER_ID=10&RETRY_GROUP=YES&MAX_RETRIES=3&BACKOFF_FACTOR=10&RETRY_HTTP_CODES=401,403&PAGING_LOGIC=NEW
     """
-    from fmeobjects import FMEException
-    from fmewebservices import FMENamedConnectionManager
-    nc = FMENamedConnectionManager().getNamedConnection(name)
-    if nc:
-        import re
-        m = re.match(r'eea.reportnet.Reportnet 3( v(\d+))?', nc.getWebService().getName())
-        if not m:
-            raise FMEException(f'`{name}` is not a valid Reportnet3 Connection')
-        version = m.group(2) or '0'
-        if not version in _RN3CRED_VERSIONS:
-            raise FMEException(f'Unrecognized  Reportnet3 Connection version `{version}`')
-        kvp = {**nc.getKeyValues()}
-        kvp['API_URL'] = kvp['API_URL'].rstrip('/')
-        return _RN3CRED_VERSIONS[version](**kvp)
-    from urllib.parse import urlparse, parse_qsl
-    o = urlparse(name)
-    if not (o.scheme in ['http', 'https'] and o.netloc):
-        raise FMEException(f'Invalid Connection: `{name}`')
-    api_url = f'{o.scheme}://{o.netloc}/{o.path}'.rstrip('/')
-    try:
-        params = dict(parse_qsl(o.query))
-        version = params.get('VERSION', '0')
-        if not version in _RN3CRED_VERSIONS:
-            raise FMEException(f'Unrecognized  Reportnet3 Connection version `{version}`')
-        return _RN3CRED_VERSIONS[version](**{'API_URL': api_url, **params})
-    except Exception as e:
-        raise FMEException(f'Could not parse connection string `{name}`. {e}')
+    params = params_from_nc(name_or_url) or params_from_url(name_or_url)
+    version = params.get('VERSION', '0')
+    if not version in _RN3CRED_VERSIONS:
+        raise FMEException(f'Unrecognized  Reportnet3 Connection version `{version}`')
+    return _RN3CRED_VERSIONS[version](**params)
