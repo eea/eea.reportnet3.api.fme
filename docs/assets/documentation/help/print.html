@@ -1,43 +1,64 @@
 <!DOCTYPE HTML>
-<html lang="en" class="sidebar-visible no-js light">
+<html lang="en" class="light sidebar-visible" dir="ltr">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>eea.reportnet [1.2.1]</title>
-        <meta name="robots" content="noindex" />
+        <title>eea.reportnet [1.3.1]</title>
+        <meta name="robots" content="noindex">
+
+
         <!-- Custom HTML head -->
-        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#ffffff" />
+        <meta name="theme-color" content="#ffffff">
 
         <link rel="shortcut icon" href="favicon.png">
         <link rel="stylesheet" href="css/variables.css">
         <link rel="stylesheet" href="css/general.css">
         <link rel="stylesheet" href="css/chrome.css">
         <link rel="stylesheet" href="css/print.css" media="print">
+
         <!-- Fonts -->
         <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
         <link rel="stylesheet" href="fonts/fonts.css">
+
         <!-- Highlight.js Stylesheets -->
-        <link rel="stylesheet" href="highlight.css">
-        <link rel="stylesheet" href="tomorrow-night.css">
-        <link rel="stylesheet" href="ayu-highlight.css">
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
     </head>
     <body>
-        <!-- Provide site root to javascript -->
-        <script type="text/javascript">
-            var path_to_root = "";
-            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
-        </script>
-
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
-        <script type="text/javascript">
+        <script>
             try {
-                var theme = localStorage.getItem('mdbook-theme');
-                var sidebar = localStorage.getItem('mdbook-sidebar');
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
 
                 if (theme.startsWith('"') && theme.endsWith('"')) {
                     localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
@@ -50,72 +71,91 @@
         </script>
 
         <!-- Set the theme before any content is loaded, prevents flash -->
-        <script type="text/javascript">
-            var theme;
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
-            var html = document.querySelector('html');
-            html.classList.remove('no-js')
+            const html = document.documentElement;
             html.classList.remove('light')
             html.classList.add(theme);
-            html.classList.add('js');
+            html.classList.add("js");
         </script>
 
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
         <!-- Hide / unhide sidebar before it is displayed -->
-        <script type="text/javascript">
-            var html = document.querySelector('html');
-            var sidebar = 'hidden';
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
             }
-            html.classList.remove('sidebar-visible');
-            html.classList.add("sidebar-" + sidebar);
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="overview.html">Overview</a></li><li class="chapter-item expanded "><a href="quick-facts-reportnet3.html">Quick Facts</a></li><li class="chapter-item expanded "><a href="feature-representation.html">Feature Representation</a></li><li class="chapter-item expanded "><a href="reader-parameters.html">Reader Parameters</a></li><li class="chapter-item expanded "><a href="reader-feature-type-param.html">Reader Feature Type Parameters</a></li><li class="chapter-item expanded "><a href="writer-parameters.html">Writer Parameters</a></li><li class="chapter-item expanded "><a href="writer-feature-type-param.html">Writer Feature Type Parameters</a></li><li class="chapter-item expanded "><a href="user-attributes.html">User Attributes</a></li><li class="chapter-item expanded "><a href="reportnet3attachmentdownloader.html">Reportnet3AttachmentDownloader</a></li><li class="chapter-item expanded affix "><li class="part-title">Advanced</li><li class="chapter-item expanded "><a href="reportnet3connectionstring.html">Dynamic Connection String</a></li><li class="chapter-item expanded "><a href="debugging.html">Debugging</a></li><li class="chapter-item expanded "><a href="version.html">Version Info</a></li></ol>
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
             </div>
-            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
 
             <div class="page">
                 <div id="menu-bar-hover-placeholder"></div>
-                <div id="menu-bar" class="menu-bar sticky bordered">
+                <div id="menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
-                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
                             <i class="fa fa-bars"></i>
-                        </button>
+                        </label>
                         <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
                             <i class="fa fa-paint-brush"></i>
                         </button>
                         <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
                         </ul>
-                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
                             <i class="fa fa-search"></i>
                         </button>
                     </div>
 
-                    <h1 class="menu-title">eea.reportnet [1.2.1]</h1>
+                    <h1 class="menu-title">eea.reportnet [1.3.1]</h1>
 
                     <div class="right-buttons">
                         <a href="print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
+
                     </div>
                 </div>
 
                 <div id="search-wrapper" class="hidden">
                     <form id="searchbar-outer" class="searchbar-outer">
-                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
                     </form>
                     <div id="searchresults-outer" class="searchresults-outer hidden">
                         <div id="searchresults-header" class="searchresults-header"></div>
@@ -123,8 +163,9 @@
                         </ul>
                     </div>
                 </div>
+
                 <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
-                <script type="text/javascript">
+                <script>
                     document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
                     document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
                     Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
@@ -166,7 +207,7 @@
 </div>
 <p>Geometry Support:</p>
 <div class="table-wrapper"><table><thead><tr><th>Geometry</th><th>Supported?</th></tr></thead><tbody>
-<tr><td>aggregate</td><td>yes<sup class="footnote-reference"><a href="#1">1</a></sup></td></tr>
+<tr><td>aggregate</td><td>yes<sup class="footnote-reference" id="fr-1-1"><a href="#footnote-1">1</a></sup></td></tr>
 <tr><td>circles</td><td>no</td></tr>
 <tr><td>circular arc</td><td>no</td></tr>
 <tr><td>donut polygon</td><td>yes</td></tr>
@@ -182,11 +223,11 @@
 <tr><td>text</td><td>no</td></tr>
 <tr><td>z values</td><td>yes</td></tr>
 </tbody></table>
-</div>
-<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
-<p>Only homogeneous aggregates (MultiPoint, MultiLine...) but not heterogeneous ones.</p>
-</div>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="reportnet-3-feature-representation-format-attributes"><a class="header" href="#reportnet-3-feature-representation-format-attributes">Reportnet 3 Feature Representation (Format Attributes)</a></h1>
+</div><hr>
+<ol class="footnote-definition"><li id="footnote-1">
+<p>Only homogeneous aggregates (MultiPoint, MultiLine...) but not heterogeneous ones. <a href="#fr-1-1">↩</a></p>
+</li>
+</ol><div style="break-before: page; page-break-before: always;"></div><h1 id="reportnet-3-feature-representation-format-attributes"><a class="header" href="#reportnet-3-feature-representation-format-attributes">Reportnet 3 Feature Representation (Format Attributes)</a></h1>
 <div class="table-wrapper"><table><thead><tr><th>Attribute Name</th><th>Notes</th><th>Contents</th></tr></thead><tbody>
 <tr><td>reportnet_type</td><td>Read-only</td><td><code>reportnet_none</code>, <code>reportnet_point</code>, <code>reportnet_linestring</code>, <code>reportnet_polygon</code></td></tr>
 <tr><td>reportnet_geom_column</td><td>Read-only</td><td>The Reportnet3 field that was used to create FME geometry.</td></tr>
@@ -196,18 +237,33 @@
 </tbody></table>
 </div><div style="break-before: page; page-break-before: always;"></div><h1 id="reportnet-3-reader-parameters"><a class="header" href="#reportnet-3-reader-parameters">Reportnet 3 Reader Parameters</a></h1>
 <h3 id="reportnet-3-connection"><a class="header" href="#reportnet-3-connection">Reportnet 3 Connection</a></h3>
-<p>The Reportnet 3 Reader uses a Reportnet 3 Web Connection. </p>
-<p>The connection should be configured with an API-key, a Dataflow ID and optionally Provider ID from the e-Reporting platform. </p>
-<p>The web connection also allows to configuration of Retry Failed Requests behaviour:</p>
-<div class="table-wrapper"><table><thead><tr><th>Attribute Name</th><th>Description</th></tr></thead><tbody>
+<p>The Reportnet 3 Reader uses a Reportnet 3 Web Connection.</p>
+<p>The connection should be configured with an API-key, a Dataflow ID and optionally Provider ID from the e-Reporting platform.</p>
+<p>The web connection also allows to configuration of Retry Failed Requests behavior:</p>
+<div class="table-wrapper"><table><thead><tr><th>Parameter Name</th><th>Description</th></tr></thead><tbody>
 <tr><td>Error Types to Retry</td><td>This parameter allows users to select the types of errors which should lead to a retry attempt. The available options include connection errors such as a network timeout or dns failure, or various HTTP error codes in the 4xx-5xx range.</td></tr>
 <tr><td>Maximum Retry Attempts (0-10)</td><td>This parameter specifies the maximum number of retry attempts that will be made for a single feature, before that feature is output through the <Rejected> port of the transformer.</td></tr>
 <tr><td>Backoff Factor</td><td>This parameter specifies the amount of time that the transformer will wait before retrying a failed request. The timeout (t in seconds) for each incremental retry will be calculated according to: <code>t = {backoff factor} * (2 ** ({number of previous retries}))</code></td></tr>
 </tbody></table>
 </div>
+<p>Depending on what backend is used to serve a certain dataflow, the reader can now be configured to use either the old paging logic or the new one.</p>
+<p>It is very important to choose the correct paging logic because incomplete and duplicated records will be produced if choosing the wrong one.</p>
+<p>If your dataflow id marked with "(Big Data)" it means you should use the <code>NEW</code> paging logic:</p>
+<figure>
+  <figcaption>Reportnet3 Website:</figcaption>
+  <img
+    src="./images/big-data-dataflow.png"
+    alt="Reportnet3 Website" />
+</figure>
+<figure>
+  <figcaption>FME Connection Parameters:</figcaption>
+  <img
+    src="./images/new-paging-logic.png"
+    alt="FME Connection Parameters" />
+</figure>
 <h3 id="dataset"><a class="header" href="#dataset">Dataset</a></h3>
 <p>The Reportnet 3 <em>Dataset</em></p>
-<p>When selecting the Reportnet Dataset using the browse-button, the value will be encoded for readability, e.g. &quot;My Dataset (42)&quot;, where 42 corresponds to the dataset id.</p>
+<p>When selecting the Reportnet Dataset using the browse-button, the value will be encoded for readability, e.g. "My Dataset (42)", where 42 corresponds to the dataset id.</p>
 <p>When supplying the value for dataset dynamically, such as when used in a FeatureReader, it is valid to only specify the numeric id.</p>
 <h3 id="tables"><a class="header" href="#tables">Table(s)</a></h3>
 <p>The Reportnet 3 <em>Table(s)</em> to read from the selected <em>Dataflow/Dataset</em></p>
@@ -217,19 +273,19 @@
 <p>Depending on how many fields a table has, the optimal value may differ.</p>
 <p>Setting a value lower than <code>1</code> is not supported.</p>
 <h3 id="concurrent-http-requests"><a class="header" href="#concurrent-http-requests">Concurrent HTTP requests</a></h3>
-<p>The reader will fetch pages in parallel up to the specified number of concurrent requests. </p>
+<p>The reader will fetch pages in parallel up to the specified number of concurrent requests.</p>
 <p>In some scenarios it <em>can</em> be possible to increase the throughput by carefully configure the bulk size in combination with number of concurrent requests.</p>
 <h3 id="connection-timeout-seconds"><a class="header" href="#connection-timeout-seconds">Connection Timeout (seconds)</a></h3>
 <p>Timeout value for the <em>full</em> download time.</p>
 <p>If retrieving data from the Reportnet3 HTTP API backend is not finished within <code>timeout</code> seconds, the connection is aborted and an exception is raised.</p>
 <h3 id="force-data-types"><a class="header" href="#force-data-types">Force data types</a></h3>
-<p>If set to <code>Yes</code>, FME will try to parse the text-values retrieved from the Reportnet3 HTTP API backend into the closest corresponding FME type, e.g. &quot;5&quot; NUMBER_INTEGER is parsed into an FME integer value of 5.</p>
+<p>If set to <code>Yes</code>, FME will try to parse the text-values retrieved from the Reportnet3 HTTP API backend into the closest corresponding FME type, e.g. "5" NUMBER_INTEGER is parsed into an FME integer value of 5.</p>
 <p>If set to <code>No</code>, interpretation is <em>not</em> performed and all values are passed to FME as text regardless of the declared type.</p>
 <h3 id="parse-geometry"><a class="header" href="#parse-geometry">Parse geometry</a></h3>
-<p>If set to <code>Yes</code>, FME will try to convert a geometry column to an FME geometry. The geometry column will be dropped from schema. The name of the geometry column will be stored in the format paramater <code>reportnet_geom_column</code>.</p>
+<p>If set to <code>Yes</code>, FME will try to convert a geometry column to an FME geometry. The geometry column will be dropped from schema. The name of the geometry column will be stored in the format parameter <code>reportnet_geom_column</code>.</p>
 <p>If set to <code>No</code>, FME will not attempt to create an FME geometry. All geometry columns from Reportnet 3 will maintain their json representation.</p>
 <h3 id="default-geom-column-for-all-feature-types"><a class="header" href="#default-geom-column-for-all-feature-types">Default geom column for all feature types</a></h3>
-<p>For Reportnet 3 tables that contain multiple geometry fields, this setting controls wich of them should be used by FME. The default behaviour is to use the first occuring geometry column in Reportnet 3 table definition.</p>
+<p>For Reportnet 3 tables that contain multiple geometry fields, this setting controls which of them should be used by FME. The default behavior is to use the first occurring geometry column in Reportnet 3 table definition.</p>
 <h2 id="schema-attributes"><a class="header" href="#schema-attributes">Schema Attributes</a></h2>
 <h3 id="additional-attributes-to-expose"><a class="header" href="#additional-attributes-to-expose">Additional Attributes to Expose</a></h3>
 <p>Use this parameter to expose Format Attributes in Workbench when you create a workspace:</p>
@@ -238,14 +294,14 @@
 <li>In a non-dynamic scenario, this parameter allows you to expose additional attributes on multiple feature types. Click the browse button to view the available format attributes (which are different for each format) for the reader.</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="reportnet-3-reader-feature-type-parameters"><a class="header" href="#reportnet-3-reader-feature-type-parameters">Reportnet 3 Reader Feature Type Parameters</a></h1>
-<p>To access feature type parameters, click the gear icon on a feature type in the workspace. This opens the Feature Type Parameter Editor. </p>
+<p>To access feature type parameters, click the gear icon on a feature type in the workspace. This opens the Feature Type Parameter Editor.</p>
 <h2 id="options"><a class="header" href="#options">Options</a></h2>
 <h3 id="where-clause"><a class="header" href="#where-clause">WHERE Clause</a></h3>
-<p>A <em>limited</em> filtering is supported by supplying a where-clause. </p>
+<p>A <em>limited</em> filtering is supported by supplying a where-clause.</p>
 <p>The where clause must contain exactly one predicate in the form:</p>
 <pre><code>&lt;identifier&gt; = &lt;literal-value&gt;
 </code></pre>
-<p>Where <code>identifier</code> is a valid fieldname (FME attribute name), and <code>literal-value</code> a valid SQL literal.</p>
+<p>Where <code>identifier</code> is a valid field name (FME attribute name), and <code>literal-value</code> a valid SQL literal.</p>
 <p>Please note that equality (=) <em>is the only</em> operator that can be used in the expression, i.e. <code>!=, &lt;, &gt;, AND, OR</code> are all examples of operators that can <em>not</em> be used.</p>
 <p>These restrictions also applies when using the Reportnet 3 Reader in a FeatureReader-transformer.</p>
 <p>Examples:</p>
@@ -253,22 +309,22 @@
 </code></pre>
 <pre><code class="language-sql">    r = 10.2
 </code></pre>
-<p>Double quotes must be used if the field name contains special characters like whitespace:</p>
-<pre><code class="language-sql">    &quot;my field&quot; = 'Some text'
+<p>Double quotes must be used if the field name contains special characters like white space:</p>
+<pre><code class="language-sql">    "my field" = 'Some text'
 </code></pre>
 <p>Single quotes in a string literal needs to be escaped by doubling them:</p>
-<pre><code class="language-sql">    &quot;my doc&quot; = 'I''d like to code more'
+<pre><code class="language-sql">    "my doc" = 'I''d like to code more'
 </code></pre>
 <p>Newlines should be ok but can be tricky.</p>
-<pre><code class="language-sql">    &quot;my doc&quot; = 'A longer text 
+<pre><code class="language-sql">    "my doc" = 'A longer text 
     Newlines should be ok'
 </code></pre>
-<p>In order to use specific newline character(s), url-encoding can be used:</p>
-<pre><code class="language-sql">    &quot;my doc&quot; = 'First line%0D%0ASecond line separated by CRLF'
+<p>In order to use specific newline character(s), URL-encoding can be used:</p>
+<pre><code class="language-sql">    "my doc" = 'First line%0D%0ASecond line separated by CRLF'
 </code></pre>
-<pre><code class="language-sql">    &quot;my doc&quot; = 'First line%0ASecond line separated by LF'
+<pre><code class="language-sql">    "my doc" = 'First line%0ASecond line separated by LF'
 </code></pre>
-<pre><code class="language-sql">    &quot;my doc&quot; = 'First line%0DSecond line separated by CR'
+<pre><code class="language-sql">    "my doc" = 'First line%0DSecond line separated by CR'
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="reportnet-3-writer-parameters"><a class="header" href="#reportnet-3-writer-parameters">Reportnet 3 Writer Parameters</a></h1>
 <h3 id="bulk-size-1"><a class="header" href="#bulk-size-1">Bulk Size</a></h3>
@@ -276,15 +332,15 @@
 <h3 id="connection-timeout"><a class="header" href="#connection-timeout">Connection Timeout</a></h3>
 <p>Timeout value for the upload time.</p>
 <p>If importing data to the Reportnet3 HTTP API backend is not finished within <code>timeout</code> seconds, the connection is aborted and an exception is raised.</p>
-<p>The import is performed in chunks controlled by &quot;Bulk Size&quot;. The timeout is set on each HTTP transaction.</p>
-<p>For optimal performance, the &quot;Bulk Size&quot; and &quot;Connection Timeout&quot;, may need to be adopted for different datasets.</p>
+<p>The import is performed in chunks controlled by "Bulk Size". The timeout is set on each HTTP transaction.</p>
+<p>For optimal performance, the "Bulk Size" and "Connection Timeout", may need to be adopted for different datasets.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="reportnet-3-writer-feature-type-parameters"><a class="header" href="#reportnet-3-writer-feature-type-parameters">Reportnet 3 Writer Feature Type Parameters</a></h1>
 <p>To access feature type parameters, click the gear icon on a feature type in the workspace. This opens the Feature Type Parameter Editor.</p>
 <h2 id="options-1"><a class="header" href="#options-1">Options</a></h2>
 <h3 id="spatial-column"><a class="header" href="#spatial-column">Spatial Column</a></h3>
 <p>Determines target attribute in Reportnet 3 to store the FME geometry. If Spatial Column is not defined, the writer will attempt to use the format attribute <code>reportnet_geom_column</code> as fallback. If the FME feature has a geometry and neither Spatial Column nor <code>reportnet_geom_column</code> was present, the writer will ignore geometry writing and output a warning message.</p>
 <h3 id="geometry-type-handling"><a class="header" href="#geometry-type-handling">Geometry type handling</a></h3>
-<p>The parameter determines how strict the geometry type checking should be in the writer. For instance, if the writer geometry type was set to <code>reportnet_point</code> and a Polygon was recieved, the writer will act as following:</p>
+<p>The parameter determines how strict the geometry type checking should be in the writer. For instance, if the writer geometry type was set to <code>reportnet_point</code> and a Polygon was received, the writer will act as following:</p>
 <ul>
 <li>Pass through: The geometry will be passed through to Reportnet 3 without type validation.</li>
 <li>Drop feature: The feature that contained the incorrect geometry type will be dropped.</li>
@@ -316,7 +372,7 @@
 </tbody></table>
 </div><div style="break-before: page; page-break-before: always;"></div><h1 id="reportnet3attachmentdownloader"><a class="header" href="#reportnet3attachmentdownloader">Reportnet3AttachmentDownloader</a></h1>
 <p>The Reportnet3AttachmentDownloader can be used to download attachments form Reportnet 3.</p>
-<p>For other usage then downloading attachments for features that are coming from a Reportnet 3 Reader, see section <a href="reportnet3attachmentdownloader.html#attachment-src_attr_single">Attachment</a> below for how to compose an attachment-attribute that can be used in this transformer.</p>
+<p>For other usage than downloading attachments for features that are coming from a Reportnet 3 Reader, see section <a href="reportnet3attachmentdownloader.html#attachment-src_attr_single">Attachment</a> below for how to compose an attachment-attribute that can be used in this transformer.</p>
 <h2 id="parameters"><a class="header" href="#parameters">Parameters</a></h2>
 <h3 id="reportnet-3-connection-reportnet_connection"><a class="header" href="#reportnet-3-connection-reportnet_connection">Reportnet 3 Connection <code>[REPORTNET_CONNECTION]</code></a></h3>
 <h3 id="attachment-selection-src_attr"><a class="header" href="#attachment-selection-src_attr">Attachment selection <code>[SRC_ATTR]</code></a></h3>
@@ -346,7 +402,7 @@
 </li>
 </ul>
 <h3 id="target-attribute-target_attr"><a class="header" href="#target-attribute-target_attr">Target Attribute [TARGET_ATTR]</a></h3>
-<p>The name of a new attribute that will recieve the content of the downloaded attachment.</p>
+<p>The name of a new attribute that will receive the content of the downloaded attachment.</p>
 <h3 id="target-attribute-encoding-target_attr_encoding"><a class="header" href="#target-attribute-encoding-target_attr_encoding">Target Attribute Encoding [TARGET_ATTR_ENCODING]</a></h3>
 <p>For attachments with text content, this should be used to specify how FME should interpret the downloaded byte-stream into a string value. For other kinds of attachments, e.g. .pdf-files, use fme-binary.</p>
 <h3 id="output-folder-output_dirname"><a class="header" href="#output-folder-output_dirname">Output Folder [OUTPUT_DIRNAME]</a></h3>
@@ -363,7 +419,8 @@
 </ol>
 <p><code>&lt;api_url&gt;?API_KEY=&lt;token&gt;[&amp;VERSION=1][&amp;PROVIDER_ID=&lt;provider_id&gt;]</code></p>
 <p><code>&lt;api_url&gt;?API_KEY=&lt;token&gt;&amp;VERSION=2&amp;DATAFLOW_ID=&lt;dataflow_id&gt;[&amp;PROVIDER_ID=&lt;provider_id&gt;]</code></p>
-<p><code>&lt;api_url&gt;?VERSION=3&amp;API_KEY=&lt;token&gt;&amp;DATAFLOW_ID=&lt;dataflow_id&gt;[&amp;PROVIDER_ID=&lt;provider_id&gt;][&amp;MAX_RETRIES=&lt;max_retries&gt;][&amp;BACKOFF_FACTOR=&lt;backoff_factor&gt;][&amp;RETRY_HTTP_CODES=&lt;retry_http_codes&gt;]</code></p>
+<p><code>&lt;api_url&gt;?API_KEY=&lt;token&gt;&amp;VERSION=3&amp;DATAFLOW_ID=&lt;dataflow_id&gt;[&amp;PROVIDER_ID=&lt;provider_id&gt;][&amp;RETRY_GROUP=YES&amp;MAX_RETRIES=&lt;max_retries&gt;&amp;BACKOFF_FACTOR=&lt;backoff_factor&gt;&amp;RETRY_HTTP_CODES=&lt;retry_http_codes&gt;]</code></p>
+<p><code>&lt;api_url&gt;?API_KEY=&lt;token&gt;&amp;VERSION=4&amp;DATAFLOW_ID=&lt;dataflow_id&gt;[&amp;PROVIDER_ID=&lt;provider_id&gt;][&amp;RETRY_GROUP=YES&amp;MAX_RETRIES=&lt;max_retries&gt;&amp;BACKOFF_FACTOR=&lt;backoff_factor&gt;&amp;RETRY_HTTP_CODES=&lt;retry_http_codes&gt;][&amp;PAGING_LOGIC=OLD|NEW]</code></p>
 <p>Examples:</p>
 <pre><code>https://test-api.reportnet.europa.eu?API_KEY=502982a2-95a5-43ae-bf3b-d16356042c86
 
@@ -371,22 +428,26 @@ https://test-api.reportnet.europa.eu?VERSION=1&amp;API_KEY=502982a2-95a5-43ae-bf
 
 https://test-api.reportnet.europa.eu?VERSION=2&amp;API_KEY=502982a2-95a5-43ae-bf3b-d16356042c86&amp;DATAFLOW_ID=861&amp;PROVIDER_ID=10
 
-https://test-api.reportnet.europa.eu?VERSION=3&amp;API_KEY=502982a2-95a5-43ae-bf3b-d16356042c86&amp;DATAFLOW_ID=861&amp;PROVIDER_ID=10&amp;MAX_RETRIES=3&amp;BACKOFF_FACTOR=10&amp;RETRY_HTTP_CODES=401,403
+https://test-api.reportnet.europa.eu?VERSION=3&amp;API_KEY=502982a2-95a5-43ae-bf3b-d16356042c86&amp;DATAFLOW_ID=861&amp;PROVIDER_ID=10&amp;RETRY_GROUP=YES&amp;MAX_RETRIES=3&amp;BACKOFF_FACTOR=10&amp;RETRY_HTTP_CODES=401,403
+
+https://test-api.reportnet.europa.eu?VERSION=4&amp;API_KEY=502982a2-95a5-43ae-bf3b-d16356042c86&amp;DATAFLOW_ID=861&amp;PROVIDER_ID=10&amp;RETRY_GROUP=YES&amp;MAX_RETRIES=3&amp;BACKOFF_FACTOR=10&amp;RETRY_HTTP_CODES=401,403&amp;PAGING_LOGIC=NEW
 </code></pre>
 <p>Please note that in version 2, <code>DATAFLOW_ID</code> was added as a mandatory url-query-parameter.</p>
+<p>Please also note that in version 3 and 4 of the FME Named Connection Web Service, the retry settings are only considered if the value of <code>RETRY_GROUP</code> is also supplied and given the value <code>YES</code>.
+This is a side effect of them being visually grouped together in a collapsible GUI-group.</p>
 <p>This logic is applied both on the reader, writer and the Reportnet3AttachmentDownloader.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="debugging"><a class="header" href="#debugging">Debugging</a></h1>
 <p>The Reader/Writer has the ability to produce different kinds of debug information.</p>
 <p>Please be aware that the debugging settings will cause <em>a lot</em> of extra I/O. In most cases, this is <em><strong>not preferred in a production environment</strong></em>.</p>
 <h2 id="fme-log-message-filter"><a class="header" href="#fme-log-message-filter">FME Log Message Filter</a></h2>
-<p>In FME Workbench, go to &quot;Tools/FME Options.../Translation/Log Message Filter&quot; and check/uncheck the option &quot;Log Debug&quot;:
+<p>In FME Workbench, go to "Tools/FME Options.../Translation/Log Message Filter" and check/uncheck the option "Log Debug":
 <img src="./images/log_debug.png" alt="log_debug.png" /></p>
 <h2 id="readerwriter-directives"><a class="header" href="#readerwriter-directives">Reader/Writer Directives</a></h2>
-<p>There are no normal GUI parameters for these settings. Instead they can be edited using the &quot;Workspace Header&quot;.</p>
-<p>In FME Workbench, Go to &quot;Tools/Edit Header...&quot; and enter the directives:
+<p>There are no normal GUI parameters for these settings. Instead they can be edited using the "Workspace Header".</p>
+<p>In FME Workbench, Go to "Tools/Edit Header..." and enter the directives:
 <img src="./images/workspace_header.png" alt="workspace_header.png" /></p>
 <h3 id="eeareportnetreportnet3_debug_geometry"><a class="header" href="#eeareportnetreportnet3_debug_geometry"><code>EEA.REPORTNET.REPORTNET3_DEBUG_GEOMETRY</code></a></h3>
-<p><strong>Boolean</strong> (yes/no) - When set to <code>yes</code>, this will cause the writer to output the GEOJSON encoded geometry of each FME Feature to the FME Log File. Note that &quot;Log Deug&quot; also has to be enabled (see above).</p>
+<p><strong>Boolean</strong> (yes/no) - When set to <code>yes</code>, this will cause the writer to output the GEOJSON encoded geometry of each FME Feature to the FME Log File. Note that "Log Debug" also has to be enabled (see above).</p>
 <p>Example:</p>
 <pre><code>EEA.REPORTNET.REPORTNET3_DEBUG_GEOMETRY yes
 </code></pre>
@@ -402,7 +463,7 @@ https://test-api.reportnet.europa.eu?VERSION=3&amp;API_KEY=502982a2-95a5-43ae-bf
 <p>Example:</p>
 <pre><code>20221201_170215_3.85_1_https__test-api.reportnet.europa.eu_dataset_v1_8974_etlImport_dataflowId=1039_200.json
 </code></pre>
-<p>Characters that are not allowed in a filename (<code>'\/:*?&quot;&lt;&gt;'</code>) will be replaced by underscore (<code>'_'</code>) or empty string (<code>''</code>).</p>
+<p>Characters that are not allowed in a filename (<code>'\/:*?"&lt;&gt;'</code>) will be replaced by underscore (<code>'_'</code>) or empty string (<code>''</code>).</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="version-info"><a class="header" href="#version-info">Version Info</a></h1>
 <h2 id="packageyaml"><a class="header" href="#packageyaml">package.yaml</a></h2>
 <pre><code class="language-yaml">fpkg_version: 1
@@ -410,8 +471,8 @@ uid: reportnet
 publisher_uid: eea
 name: Reportnet 3
 description: Access to European Environment Agency environmental and climate reporting data.
-version: 1.2.1
-minimum_fme_build: 22802
+version: 1.3.1
+minimum_fme_build: 22623
 author:
   name: EEA
   email: discomap@eea.europa.eu
@@ -428,8 +489,17 @@ package_content:
       - name: Reportnet 3.xml
 </code></pre>
 <h2 id="commit"><a class="header" href="#commit">Commit</a></h2>
-<p><a href="https://github.com/eea/eea.reportnet3.api.fme/tree/e19df6815720f3a941a3422d37f5798c1804e89b">eea.reportnet3.api.fme@e19df6815720f3a941a3422d37f5798c1804e89b</a></p>
+<p><a href="https://github.com/eea/eea.reportnet3.api.fme/tree/dfb4055d98fa32824e5768803e95101e9ea63c0c">eea.reportnet3.api.fme@dfb4055d98fa32824e5768803e95101e9ea63c0c</a></p>
 <h1 id="reportnet-3-changes"><a class="header" href="#reportnet-3-changes">Reportnet 3 changes</a></h1>
+<h2 id="v131"><a class="header" href="#v131">v1.3.1</a></h2>
+<ul>
+<li>Evaluation of connection parameters was reorganized.</li>
+<li>Example and documentation of retry settings were clarified.</li>
+</ul>
+<h2 id="v130"><a class="header" href="#v130">v1.3.0</a></h2>
+<ul>
+<li>Paging is now implemented to work with both the old and the new backend.</li>
+</ul>
 <h2 id="v120"><a class="header" href="#v120">v1.2.0</a></h2>
 <ul>
 <li>Web Connection is updated to allow configuration of HTTP retry attempts.</li>
@@ -458,8 +528,8 @@ EEA.REPORTNET.REPORTNET3_DEBUG_HTTP_POST C:\temp\my_rn3_http_posts
 </code></pre>
 <h2 id="v102"><a class="header" href="#v102">v1.0.2</a></h2>
 <ul>
-<li>&quot;Bulk Size&quot; parameter that controls how many FME Features is now a writer parameter instead of a feature type parameter</li>
-<li>Writer parameter &quot;Connection Timeout&quot; was added</li>
+<li>"Bulk Size" parameter that controls how many FME Features is now a writer parameter instead of a feature type parameter</li>
+<li>Writer parameter "Connection Timeout" was added</li>
 </ul>
 <h2 id="v101"><a class="header" href="#v101">v1.0.1</a></h2>
 <p>README updated</p>
@@ -468,7 +538,7 @@ EEA.REPORTNET.REPORTNET3_DEBUG_HTTP_POST C:\temp\my_rn3_http_posts
 <p>Errors when parsing geometry should now be more detailed</p>
 <h2 id="v027"><a class="header" href="#v027">v0.2.7</a></h2>
 <p>The setting for Dataflow ID has now moved into the connection parameters.</p>
-<p>Because of this, the named connection has got a &quot;version bump&quot;, i.e. named connections created with earlier versions of the reportnet3 package will not work with this version of the reader/writer/transformer.</p>
+<p>Because of this, the named connection has got a "version bump", i.e. named connections created with earlier versions of the reportnet3 package will not work with this version of the reader/writer/transformer.</p>
 <p>Workspaces created with earlier versions of the reportnet3 package should continue to work.</p>
 <h2 id="v026"><a class="header" href="#v026">v0.2.6</a></h2>
 <p>Let Readers inherit name from the selected webconnection</p>
@@ -482,31 +552,44 @@ EEA.REPORTNET.REPORTNET3_DEBUG_HTTP_POST C:\temp\my_rn3_http_posts
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
+
+
                         <div style="clear: both"></div>
                     </nav>
                 </div>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
             </nav>
 
         </div>
 
-        <script type="text/javascript">
+
+
+
+        <script>
             window.playground_copyable = true;
         </script>
-        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
-        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
-        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
 
         <!-- Custom JS scripts -->
-        <script type="text/javascript">
+
+        <script>
         window.addEventListener('load', function() {
             window.setTimeout(window.print, 100);
         });
         </script>
+
+
+    </div>
     </body>
 </html>
