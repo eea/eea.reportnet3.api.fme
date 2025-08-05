@@ -30,6 +30,6 @@ https://test-api.reportnet.europa.eu?VERSION=4&API_KEY=502982a2-95a5-43ae-bf3b-d
 Please note that in version 2, `DATAFLOW_ID` was added as a mandatory url-query-parameter.
 
 Please also note that in version 3 and 4 of the FME Named Connection Web Service, the retry settings are only considered if the value of `RETRY_GROUP` is also supplied and given the value `YES`.
-This is a side effect of them beeing visually grouped together in a collapsible GUI-group.
+This is a side effect of them being visually grouped together in a collapsible GUI-group.
 
 This logic is applied both on the reader, writer and the Reportnet3AttachmentDownloader.
