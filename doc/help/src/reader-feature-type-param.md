@@ -9,7 +9,7 @@ The where clause must contain exactly one predicate in the form:
 
     <identifier> = <literal-value>
 
-Where `identifier` is a valid fieldname (FME attribute name), and `literal-value` a valid SQL literal.
+Where `identifier` is a valid field name (FME attribute name), and `literal-value` a valid SQL literal.
 
 Please note that equality (=) _is the only_ operator that can be used in the expression, i.e. `!=, <, >, AND, OR` are all examples of operators that can _not_ be used.
 
@@ -24,7 +24,7 @@ Examples:
     r = 10.2
 ```
 
-Double quotes must be used if the field name contains special characters like whitespace:
+Double quotes must be used if the field name contains special characters like white space:
 ```sql
     "my field" = 'Some text'
 ```
@@ -40,7 +40,7 @@ Newlines should be ok but can be tricky.
     Newlines should be ok'
 ```
 
-In order to use specific newline character(s), url-encoding can be used:
+In order to use specific newline character(s), URL-encoding can be used:
 
 ```sql
     "my doc" = 'First line%0D%0ASecond line separated by CRLF'

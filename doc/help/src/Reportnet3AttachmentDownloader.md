@@ -35,7 +35,7 @@ Choose multiple attachment attributes to be processed.
     The features will have the value of the attachment attribute(s) replaced with the resulting local filepath.
 
 ### Target Attribute [TARGET_ATTR]
-The name of a new attribute that will recieve the content of the downloaded attachment.
+The name of a new attribute that will receive the content of the downloaded attachment.
 
 ### Target Attribute Encoding [TARGET_ATTR_ENCODING]
 For attachments with text content, this should be used to specify how FME should interpret the downloaded byte-stream into a string value. For other kinds of attachments, e.g. .pdf-files, use fme-binary.

@@ -5,9 +5,9 @@ The Reportnet 3 Reader uses a Reportnet 3 Web Connection.
 
 The connection should be configured with an API-key, a Dataflow ID and optionally Provider ID from the e-Reporting platform. 
 
-The web connection also allows to configuration of Retry Failed Requests behaviour:
+The web connection also allows to configuration of Retry Failed Requests behavior:
 
-| Attribute Name                |  Description                 |
+| Parameter Name                |  Description                 |
 | ----------------------------- | ---------------------------- |
 | Error Types to Retry          | This parameter allows users to select the types of errors which should lead to a retry attempt. The available options include connection errors such as a network timeout or dns failure, or various HTTP error codes in the 4xx-5xx range. |
 | Maximum Retry Attempts (0-10) | This parameter specifies the maximum number of retry attempts that will be made for a single feature, before that feature is output through the <Rejected> port of the transformer. |
@@ -19,9 +19,21 @@ It is very important to choose the correct paging logic because incomplete and d
 
 If your dataflow id marked with "(Big Data)" it means you should use the `NEW` paging logic:
 
-![](./images/big-data-dataflow.png)
 
-![](./images/new-paging-logic.png)
+<figure>
+  <figcaption>Reportnet3 Website:</figcaption>
+  <img
+    src="./images/big-data-dataflow.png"
+    alt="Reportnet3 Website" />
+</figure>
+
+<figure>
+  <figcaption>FME Connection Parameters:</figcaption>
+  <img
+    src="./images/new-paging-logic.png"
+    alt="FME Connection Parameters" />
+</figure>
+
 
 ### Dataset
 The Reportnet 3 *Dataset*
@@ -58,12 +70,12 @@ If set to `Yes`, FME will try to parse the text-values retrieved from the Report
 If set to `No`, interpretation is *not* performed and all values are passed to FME as text regardless of the declared type.
 
 ### Parse geometry
-If set to `Yes`, FME will try to convert a geometry column to an FME geometry. The geometry column will be dropped from schema. The name of the geometry column will be stored in the format paramater `reportnet_geom_column`.
+If set to `Yes`, FME will try to convert a geometry column to an FME geometry. The geometry column will be dropped from schema. The name of the geometry column will be stored in the format parameter `reportnet_geom_column`.
 
 If set to `No`, FME will not attempt to create an FME geometry. All geometry columns from Reportnet 3 will maintain their json representation.
 
 ### Default geom column for all feature types
-For Reportnet 3 tables that contain multiple geometry fields, this setting controls wich of them should be used by FME. The default behaviour is to use the first occuring geometry column in Reportnet 3 table definition.
+For Reportnet 3 tables that contain multiple geometry fields, this setting controls which of them should be used by FME. The default behavior is to use the first occurring geometry column in Reportnet 3 table definition.
 
 ## Schema Attributes
 ### Additional Attributes to Expose

@@ -15,7 +15,7 @@ In FME Workbench, Go to "Tools/Edit Header..." and enter the directives:
 
 
 ### `EEA.REPORTNET.REPORTNET3_DEBUG_GEOMETRY`
-**Boolean** (yes/no) - When set to `yes`, this will cause the writer to output the GEOJSON encoded geometry of each FME Feature to the FME Log File. Note that "Log Deug" also has to be enabled (see above).
+**Boolean** (yes/no) - When set to `yes`, this will cause the writer to output the GEOJSON encoded geometry of each FME Feature to the FME Log File. Note that "Log Debug" also has to be enabled (see above).
 
 Example:
 
