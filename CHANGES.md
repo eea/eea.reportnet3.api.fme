@@ -1,5 +1,8 @@
 # Reportnet 3 changes
 
+## v1.3.2
+* Removed alias from transformer Reportnet3AttachmentDownloader
+
 ## v1.3.1
 * Evaluation of connection parameters was reorganized.
 * Example and documentation of retry settings were clarified.
