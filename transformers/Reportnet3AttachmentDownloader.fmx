@@ -6,8 +6,6 @@ VERSION: 3
 
 PYTHON_COMPATIBILITY: 38
 
-ALIASES: AttachmentDownloader
-
 CATEGORY: Web,Workflows 
 
 CANVAS_PROPERTIES: OPEN_FOLDER;PATH,OUTPUT_DIRNAME
@@ -143,8 +141,6 @@ TRANSFORMER_NAME: eea.reportnet.Reportnet3AttachmentDownloader
 
 VERSION: 2
 
-ALIASES: AttachmentDownloader
-
 CATEGORY: Web,Workflows 
 
 CANVAS_PROPERTIES: OPEN_FOLDER;PATH,OUTPUT_DIRNAME
@@ -278,8 +274,6 @@ TEMPLATE_END
 TRANSFORMER_NAME: eea.reportnet.Reportnet3AttachmentDownloader
 
 VERSION: 1
-
-ALIASES: AttachmentDownloader
 
 CATEGORY: Web,Workflows 
 
