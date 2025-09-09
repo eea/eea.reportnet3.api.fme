@@ -1,4 +1,3 @@
-from re import T
 import fmeobjects
 from fmeobjects import FMEException, FMELogFile, FMEFeature
 from pluginbuilder import FMEReader
