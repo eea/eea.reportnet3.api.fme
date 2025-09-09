@@ -1,5 +1,8 @@
 # Reportnet 3 changes
 
+## v1.3.3
+* Removed usage of `re.T` since it has been removed in Python 3.13
+
 ## v1.3.2
 * Removed alias from transformer Reportnet3AttachmentDownloader
 
