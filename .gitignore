@@ -10,3 +10,4 @@ devenv/**.commit_hash
 reportnet3_logging.json
 .commit_hash
 docs
+.python-version
